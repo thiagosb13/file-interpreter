@@ -7,7 +7,7 @@ public abstract class Line implements ILine {
 
     protected abstract void objectToText();
 
-    private String lineValue;
+    protected String lineValue;
 
     public String getLineValue() {
         objectToText();

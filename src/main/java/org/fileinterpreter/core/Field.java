@@ -13,7 +13,7 @@ public class Field {
     }
     
     public String getValue() {
-        return rawValue.trim();
+        return getRawValue().trim();
     }
 
     public void setValue(String value) {
@@ -21,6 +21,6 @@ public class Field {
     }
     
     public String getRawValue() {
-        return rawValue;
+        return rawValue == null ? defaultValue : rawValue;
     }
 }

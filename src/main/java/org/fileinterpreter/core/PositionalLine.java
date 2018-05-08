@@ -18,8 +18,6 @@ public class PositionalLine extends Line {
 
     @Override
     protected void textToObject() {
-        String lineValue = getLineValue();
-
         for (PositionalField field : fields) {
             try {
                 int beginIndex = field.initialPos - 1;
@@ -37,5 +35,12 @@ public class PositionalLine extends Line {
 
     @Override
     protected void objectToText() {
+        StringBuilder line = new StringBuilder();
+        
+        for (PositionalField field : fields) {
+            line.append(field.getRawValue());
+        }
+        
+        lineValue = line.toString();
     }
 }
