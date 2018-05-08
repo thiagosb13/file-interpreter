@@ -1,9 +1,8 @@
 package org.fileinterpreter.positionalline;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-import org.fileinterpreter.core.PositionalField;
-import org.fileinterpreter.core.PositionalLine;
 import org.junit.Test;
 
 public class ReadingPositionalLineTest {
@@ -13,8 +12,8 @@ public class ReadingPositionalLineTest {
         PositionalLineSample sample = new PositionalLineSample();
         sample.setLineValue("1-00                JOHN DOE                      ");
         
-        assertEquals("1-00                ", sample.userID.getRawValue());
-        assertEquals("JOHN DOE                      ", sample.name.getRawValue());
+        assertThat(sample.userID.getRawValue(), is("1-00                "));
+        assertThat(sample.name.getRawValue(), is("JOHN DOE                      "));
     }
 
     @Test
@@ -22,8 +21,8 @@ public class ReadingPositionalLineTest {
         PositionalLineSample sample = new PositionalLineSample();
         sample.setLineValue("1-00                JOHN DOE                      ");
 
-        assertEquals("1-00", sample.userID.getValue());
-        assertEquals("JOHN DOE", sample.name.getValue());
+        assertThat(sample.userID.getValue(), is("1-00"));
+        assertThat(sample.name.getValue(), is("JOHN DOE"));
     }
 
     @Test
@@ -31,25 +30,7 @@ public class ReadingPositionalLineTest {
         PositionalLineSample sample = new PositionalLineSample();
         sample.setLineValue("1-00                JOHN DOE      ");
         
-        assertEquals("1-00", sample.userID.getValue());
-        assertEquals("", sample.name.getValue());
-    }
-    
-    private class PositionalLineSample extends PositionalLine {
-        public PositionalField userID;
-        public PositionalField name;
-
-        public PositionalLineSample() {
-            userID = new PositionalField(this);
-            userID.name = "User ID";
-            userID.initialPos = 1;
-            userID.size = 20;
-
-            name = new PositionalField(this);
-            name.name = "User Name";
-            name.initialPos = 21;
-            name.size = 30;
-            name.defaultValue = "NC";
-        }
+        assertThat(sample.userID.getValue(), is("1-00"));
+        assertThat(sample.name.getValue(), is(""));
     }
 }
