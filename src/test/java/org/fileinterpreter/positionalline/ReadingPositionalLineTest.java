@@ -1,4 +1,4 @@
-package org.fileinterpreter;
+package org.fileinterpreter.positionalline;
 
 import static org.junit.Assert.assertEquals;
 
