@@ -20,14 +20,14 @@ public class PositionalLine extends Line {
     protected void textToObject() {
         for (PositionalField field : fields) {
             try {
-                int beginIndex = field.initialPos - 1;
+                int beginIndex = field.getInitialPos() - 1;
     
-                field.setValue(lineValue.substring(beginIndex, beginIndex + field.size));
+                field.setValue(lineValue.substring(beginIndex, beginIndex + field.size()));
             } catch (Exception e) {
                 field.setValue("");
                 
                 Logger.error(String.format("Could not get the value of the '%s' field from '%s' line.", 
-                                           field.name, lineValue));
+                                           field.getName(), lineValue));
                 Logger.error(e);
             }
         }

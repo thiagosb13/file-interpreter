@@ -35,7 +35,7 @@ public class WritingPositionalLineTest {
     @Test
     public void ifAFieldIsConfiguredToRTLShouldWriteItRightAligned() {
         PositionalLineSample sample = new PositionalLineSample();
-        sample.name.rtl = true;
+        sample.name.rtl();
         sample.name.setValue("JOHN DOE");
         sample.userID.setValue("1-00");
         
