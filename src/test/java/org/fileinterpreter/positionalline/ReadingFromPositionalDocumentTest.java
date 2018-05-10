@@ -16,10 +16,13 @@ public class ReadingFromPositionalDocumentTest {
         document.setLineDelimiter("~");
         document.setText("1-00                JOHN DOE                      ~2-00                JOE BLACK                     ");
         
-        assertThat(((PositionalLineSample)document.getLines().get(0)).userID.getValue(), is("1-00"));
-        assertThat(((PositionalLineSample)document.getLines().get(0)).name.getValue(), is("JOHN DOE"));
-        assertThat(((PositionalLineSample)document.getLines().get(1)).userID.getValue(), is("2-00"));
-        assertThat(((PositionalLineSample)document.getLines().get(1)).name.getValue(), is("JOE BLACK"));
+        PositionalLineSample line1 = (PositionalLineSample)document.getLines().get(0);
+        assertThat(line1.userID.getValue(), is("1-00"));
+        assertThat(line1.name.getValue(), is("JOHN DOE"));
+        
+        PositionalLineSample line2 = (PositionalLineSample)document.getLines().get(1);
+        assertThat(line2.userID.getValue(), is("2-00"));
+        assertThat(line2.name.getValue(), is("JOE BLACK"));
     }
     
     private class DocumentSample extends Document {

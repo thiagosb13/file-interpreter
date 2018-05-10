@@ -8,13 +8,15 @@ class PositionalLineSample extends PositionalLine {
     public PositionalField name;
 
     public PositionalLineSample() {
-        userID = new PositionalField(this).named("User ID")
-                                          .startingAt(1)
-                                          .withSize(20);
+        userID = PositionalField.createTo(this)
+                                .named("User ID")
+                                .startingAt(1)
+                                .withSize(20);
 
-        name = new PositionalField(this).named("User Name")
-                                        .startingAt(21)
-                                        .withSize(30)
-                                        .withDefaultValue("NC");
+        name = PositionalField.createTo(this)
+                              .named("User Name")
+                              .startingAt(21)
+                              .withSize(30)
+                              .withDefaultValue("NC");
     }
 }

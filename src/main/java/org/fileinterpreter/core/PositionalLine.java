@@ -20,7 +20,7 @@ public class PositionalLine extends Line {
     protected void textToObject() {
         for (PositionalField field : fields) {
             try {
-                int beginIndex = field.getInitialPos() - 1;
+                int beginIndex = field.getStartIndex() - 1;
     
                 field.setValue(lineValue.substring(beginIndex, beginIndex + field.size()));
             } catch (Exception e) {

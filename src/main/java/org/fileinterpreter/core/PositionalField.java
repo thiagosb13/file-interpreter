@@ -4,13 +4,18 @@ import com.google.common.base.Ascii;
 import com.google.common.base.Strings;
 
 public class PositionalField extends Field {
-    private int initialPos;
+    private int startIndex;
     private int size;
+    private char defaultFilling;
     private boolean rtl;
 
-    public PositionalField(Line line) {
+    private PositionalField(Line line) {
         super(line);
         rtl = false;
+    }
+    
+    public static PositionalField createTo(Line line) {
+        return new PositionalField(line);
     }
     
     public PositionalField named(String name) {
@@ -21,8 +26,8 @@ public class PositionalField extends Field {
         return (PositionalField) super.withDefaultValue(defaultValue);
     }
     
-    public PositionalField startingAt(int position) {
-        this.initialPos = position;
+    public PositionalField startingAt(int index) {
+        this.startIndex = index;
         return this;
     }
 
@@ -30,10 +35,23 @@ public class PositionalField extends Field {
         this.size = size;
         return this;
     }
+        
+    public Field withDefaultFilling(char defaultFilling) {
+        this.defaultFilling = defaultFilling;
+        return this;
+    }    
 
     public PositionalField rtl() {
         this.rtl = true;
         return this;
+    }
+    
+    public int getStartIndex() {
+        return startIndex;
+    }
+    
+    public int size() {
+        return size;
     }
 
     public String getRawValue() {
@@ -48,12 +66,8 @@ public class PositionalField extends Field {
     private String trunc(String value) {
     	return Ascii.truncate(value, Math.min(value.length(), size), "");
     }
-
-    public int getInitialPos() {
-        return initialPos;
-    }
-
-    public int size() {
-        return size;
+    
+    private char getDefaultFilling() {
+        return defaultFilling == Character.MIN_VALUE ? ' ' : defaultFilling;
     }
 }
