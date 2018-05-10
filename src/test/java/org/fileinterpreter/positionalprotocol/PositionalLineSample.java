@@ -1,4 +1,4 @@
-package org.fileinterpreter.positionalline;
+package org.fileinterpreter.positionalprotocol;
 
 import org.fileinterpreter.core.PositionalField;
 import org.fileinterpreter.core.PositionalLine;

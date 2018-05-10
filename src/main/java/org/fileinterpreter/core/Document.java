@@ -3,6 +3,8 @@ package org.fileinterpreter.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Joiner;
+
 public abstract class Document {
 	private String lineDelimiter;
 	protected List<Line> lines;
@@ -29,10 +31,13 @@ public abstract class Document {
 	}
 
 	public void objectToText() {
-
+        text = Joiner.on(getLineDelimiter())
+                     .join(lines.stream()
+                                .map(Line::getLineValue)
+                                .toArray());
 	}
 
-	public String getLineDelimiter() {
+	private String getLineDelimiter() {
 		return lineDelimiter != null ? lineDelimiter : "\r\n";
 	}
 
