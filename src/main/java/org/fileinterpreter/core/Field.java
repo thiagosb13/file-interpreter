@@ -7,11 +7,14 @@ public class Field {
 
     private String name;
     private String defaultValue;
+    private char defaultFilling;
     private String rawValue;
     
     protected Field(ILine line) {
         this.line = line;
         this.line.add(this);
+        
+        defaultFilling = ' ';
     }
     
     public Field named(String name) {
@@ -20,7 +23,12 @@ public class Field {
     }
     
     public Field withDefaultValue(String defaultValue) {
-        this.defaultValue = defaultValue;
+    	this.defaultValue = defaultValue;
+    	return this;
+    }
+    
+    public Field withDefaultFilling(char defaultFilling) {
+        this.defaultFilling = defaultFilling;
         return this;
     }
     
@@ -39,8 +47,12 @@ public class Field {
     public String getName() {
         return name;
     }
-
+    
     public String getDefaultValue() {
-        return Strings.emptyToNull(defaultValue);
+    	return Strings.emptyToNull(defaultValue);
+    }
+
+    public char getDefaultFilling() {
+        return defaultFilling;
     }
 }

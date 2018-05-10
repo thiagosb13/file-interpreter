@@ -20,7 +20,7 @@ public abstract class Document {
 	}
 
 	public void textToObject() {
-		String[] linesText = text.split(lineDelimiter);
+		String[] linesText = text.split(getLineDelimiter());
 
 		for (int i = 0; i < getLines().size(); i++) {
 			Line line = getLines().get(i);

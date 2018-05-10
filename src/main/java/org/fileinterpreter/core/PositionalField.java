@@ -41,7 +41,8 @@ public class PositionalField extends Field {
     }
 
     private String pad(String value) {
-    	return rtl ? Strings.padStart(value, size, ' ') : Strings.padEnd(value, size, ' ');
+    	return rtl ? Strings.padStart(value, size, getDefaultFilling()) 
+    			   : Strings.padEnd(value, size, getDefaultFilling());
     }
 
     private String trunc(String value) {
@@ -54,9 +55,5 @@ public class PositionalField extends Field {
 
     public int size() {
         return size;
-    }
-
-    public boolean isRtl() {
-        return rtl;
     }
 }

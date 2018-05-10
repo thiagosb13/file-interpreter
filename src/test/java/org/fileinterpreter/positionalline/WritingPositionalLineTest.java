@@ -6,13 +6,24 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 public class WritingPositionalLineTest {
-    @Test
-    public void shouldBuiltTheObjectBasedOnFieldsDefinition() {
+	@Test
+	public void shouldBuildTheObjectBasedOnFieldsDefinition() {
+		PositionalLineSample sample = new PositionalLineSample();
+		sample.name.setValue("JOHN DOE");
+		sample.userID.setValue("1-00");
+		
+		assertThat(sample.getLineValue(), is("1-00                JOHN DOE                      "));
+	}
+
+	@Test
+    public void shouldCompleteFieldValueWithDefaultFilling() {
         PositionalLineSample sample = new PositionalLineSample();
+        sample.name.withDefaultFilling('*');
         sample.name.setValue("JOHN DOE");
+        sample.userID.withDefaultFilling('#');
         sample.userID.setValue("1-00");
         
-        assertThat(sample.getLineValue(), is("1-00                JOHN DOE                      "));
+        assertThat(sample.getLineValue(), is("1-00################JOHN DOE**********************"));
     }
     
     @Test
