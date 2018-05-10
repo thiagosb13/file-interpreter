@@ -1,6 +1,6 @@
 package org.fileinterpreter.core;
 
-public abstract class Line implements ILine {
+public abstract class Line {
     public abstract void add(Field field);
 
     protected abstract void textToObject();

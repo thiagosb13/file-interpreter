@@ -3,14 +3,14 @@ package org.fileinterpreter.core;
 import com.google.common.base.Strings;
 
 public class Field {
-    protected final ILine line;
+    protected final Line line;
 
     private String name;
     private String defaultValue;
     private char defaultFilling;
     private String rawValue;
     
-    protected Field(ILine line) {
+    protected Field(Line line) {
         this.line = line;
         this.line.add(this);
         

@@ -8,7 +8,7 @@ public class PositionalField extends Field {
     private int size;
     private boolean rtl;
 
-    public PositionalField(ILine line) {
+    public PositionalField(Line line) {
         super(line);
         rtl = false;
     }
