@@ -1,5 +1,7 @@
 package org.fileinterpreter.core;
 
+import com.google.common.base.Strings;
+
 public class Field {
     protected final ILine line;
 
@@ -10,8 +12,6 @@ public class Field {
     protected Field(ILine line) {
         this.line = line;
         this.line.add(this);
-        
-        defaultValue = "";
     }
     
     public Field named(String name) {
@@ -33,7 +33,7 @@ public class Field {
     }
     
     public String getRawValue() {
-        return rawValue == null ? defaultValue : rawValue;
+        return rawValue == null ? getDefaultValue() : rawValue;
     }
 
     public String getName() {
@@ -41,6 +41,6 @@ public class Field {
     }
 
     public String getDefaultValue() {
-        return defaultValue;
+        return Strings.emptyToNull(defaultValue);
     }
 }

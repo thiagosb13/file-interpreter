@@ -1,5 +1,8 @@
 package org.fileinterpreter.core;
 
+import com.google.common.base.Ascii;
+import com.google.common.base.Strings;
+
 public class PositionalField extends Field {
     private int initialPos;
     private int size;
@@ -38,13 +41,11 @@ public class PositionalField extends Field {
     }
 
     private String pad(String value) {
-        String format = String.format("%s%s%s%s", "%1$", rtl ? "" : "-", size, "s");
-
-        return String.format(format, value);
+    	return rtl ? Strings.padStart(value, size, ' ') : Strings.padEnd(value, size, ' ');
     }
 
     private String trunc(String value) {
-        return value.substring(0, Math.min(value.length(), size));
+    	return Ascii.truncate(value, Math.min(value.length(), size), "");
     }
 
     public int getInitialPos() {
