@@ -1,9 +1,13 @@
 package org.fileinterpreter.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.base.Joiner;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 public abstract class Document {
 	private String lineDelimiter;
@@ -24,10 +28,9 @@ public abstract class Document {
 	public void textToObject() {
 		String[] linesText = text.split(getLineDelimiter());
 
-		for (int i = 0; i < getLines().size(); i++) {
-			Line line = getLines().get(i);
-			line.setLineValue(linesText[i]);
-		}
+		List<Line> line = getLines().collect(toList());
+        IntStream.range(0, linesText.length)
+                 .forEach(idx -> line.get(idx).setLineValue(linesText[idx]));
 	}
 
 	public void objectToText() {
@@ -45,7 +48,7 @@ public abstract class Document {
 		this.lineDelimiter = lineDelimiter;
 	}
 
-	public List<Line> getLines() {
-		return lines != null ? lines : new ArrayList<>();
+	public Stream<Line> getLines() {
+        return Optional.ofNullable(lines).map(List::stream).orElseGet(Stream::empty);
 	}
 }

@@ -55,7 +55,9 @@ public class PositionalField extends Field {
     }
 
     public String getRawValue() {
-        return trunc(pad(super.getRawValue()));
+        String rawValue = super.getRawValue();
+
+        return rawValue == null ? "" : trunc(pad(rawValue));
     }
 
     private String pad(String value) {
