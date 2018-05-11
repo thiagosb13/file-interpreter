@@ -30,13 +30,13 @@ public abstract class Document {
 
 		List<Line> line = getLines().collect(toList());
         IntStream.range(0, linesText.length)
-                 .forEach(idx -> line.get(idx).setLineValue(linesText[idx]));
+                 .forEach(idx -> line.get(idx).setValue(linesText[idx]));
 	}
 
 	public void objectToText() {
         text = Joiner.on(getLineDelimiter())
                      .join(lines.stream()
-                                .map(Line::getLineValue)
+                                .map(Line::getValue)
                                 .toArray());
 	}
 

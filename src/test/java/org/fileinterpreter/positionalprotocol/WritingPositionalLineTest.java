@@ -12,7 +12,7 @@ public class WritingPositionalLineTest {
 		sample.name.setValue("JOHN DOE");
 		sample.userID.setValue("1-00");
 		
-		assertThat(sample.getLineValue(), is("1-00                JOHN DOE                      "));
+		assertThat(sample.getValue(), is("1-00                JOHN DOE                      "));
 	}
 
 	@Test
@@ -23,7 +23,7 @@ public class WritingPositionalLineTest {
         sample.userID.withDefaultFilling('#');
         sample.userID.setValue("1-00");
         
-        assertThat(sample.getLineValue(), is("1-00################JOHN DOE**********************"));
+        assertThat(sample.getValue(), is("1-00################JOHN DOE**********************"));
     }
     
     @Test
@@ -32,7 +32,7 @@ public class WritingPositionalLineTest {
         sample.name.setValue("JOHN DOE 999999999999999999999999999999");
         sample.userID.setValue("1-00 99999999999999999999999999999999");
 
-        assertThat(sample.getLineValue(), is("1-00 999999999999999JOHN DOE 999999999999999999999"));
+        assertThat(sample.getValue(), is("1-00 999999999999999JOHN DOE 999999999999999999999"));
     }
 
     @Test
@@ -40,7 +40,7 @@ public class WritingPositionalLineTest {
         PositionalLineSample sample = new PositionalLineSample();
         sample.userID.setValue("1-00");
         
-        assertThat(sample.getLineValue(), is("1-00                NC                            "));
+        assertThat(sample.getValue(), is("1-00                NC                            "));
     }
     
     @Test
@@ -50,6 +50,6 @@ public class WritingPositionalLineTest {
         sample.name.setValue("JOHN DOE");
         sample.userID.setValue("1-00");
         
-        assertThat(sample.getLineValue(), is("1-00                                      JOHN DOE"));
+        assertThat(sample.getValue(), is("1-00                                      JOHN DOE"));
     }
 }

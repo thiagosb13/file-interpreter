@@ -22,12 +22,12 @@ public class PositionalLine extends Line {
             try {
                 int beginIndex = field.getStartIndex() - 1;
     
-                field.setValue(lineValue.substring(beginIndex, beginIndex + field.size()));
+                field.setValue(value.substring(beginIndex, beginIndex + field.size()));
             } catch (Exception e) {
                 field.setValue("");
                 
                 Logger.error(String.format("Could not get the value of the '%s' field from '%s' line.", 
-                                           field.getName(), lineValue));
+                                           field.getName(), value));
                 Logger.error(e);
             }
         }
@@ -41,6 +41,6 @@ public class PositionalLine extends Line {
             line.append(field.getRawValue());
         }
         
-        lineValue = line.toString();
+        value = line.toString();
     }
 }

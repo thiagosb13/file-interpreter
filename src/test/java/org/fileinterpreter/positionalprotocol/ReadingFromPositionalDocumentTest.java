@@ -1,13 +1,12 @@
 package org.fileinterpreter.positionalprotocol;
 
-import org.fileinterpreter.core.Document;
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.text.IsEmptyString.isEmptyString;
 import static org.junit.Assert.assertThat;
+
+import org.fileinterpreter.core.Document;
+import org.junit.Test;
 
 public class ReadingFromPositionalDocumentTest {
 

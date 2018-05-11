@@ -10,7 +10,7 @@ public class ReadingPositionalLineTest {
     @Test
     public void shouldSplitFieldsFillInRawValuesBasedOnConfiguration() {
         PositionalLineSample sample = new PositionalLineSample();
-        sample.setLineValue("1-00                JOHN DOE                      ");
+        sample.setValue("1-00                JOHN DOE                      ");
         
         assertThat(sample.userID.getRawValue(), is("1-00                "));
         assertThat(sample.name.getRawValue(), is("JOHN DOE                      "));
@@ -19,7 +19,7 @@ public class ReadingPositionalLineTest {
     @Test
     public void shouldSplitFieldsAndTrimValuesBasedOnConfiguration() {
         PositionalLineSample sample = new PositionalLineSample();
-        sample.setLineValue("1-00                JOHN DOE                      ");
+        sample.setValue("1-00                JOHN DOE                      ");
 
         assertThat(sample.userID.getValue(), is("1-00"));
         assertThat(sample.name.getValue(), is("JOHN DOE"));
@@ -28,7 +28,7 @@ public class ReadingPositionalLineTest {
     @Test
     public void whenTextLineSizeIsLessThanPositionalLineSizeObjectShouldFillInFieldsWithEmptyValue() {
         PositionalLineSample sample = new PositionalLineSample();
-        sample.setLineValue("1-00                JOHN DOE      ");
+        sample.setValue("1-00                JOHN DOE      ");
         
         assertThat(sample.userID.getValue(), is("1-00"));
         assertThat(sample.name.getValue(), is(""));

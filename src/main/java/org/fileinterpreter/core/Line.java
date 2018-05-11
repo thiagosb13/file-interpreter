@@ -7,15 +7,15 @@ public abstract class Line {
 
     protected abstract void objectToText();
 
-    protected String lineValue;
+    protected String value;
 
-    public String getLineValue() {
+    public String getValue() {
         objectToText();
-        return lineValue;
+        return value;
     }
 
-    public void setLineValue(String value) {
-        lineValue = value;
+    public void setValue(String value) {
+        this.value = value;
         textToObject();
     }
 }
