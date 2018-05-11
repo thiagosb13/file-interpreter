@@ -13,17 +13,17 @@ public abstract class Document {
     private String lineDelimiter;
 	protected List<Line> lines;
 
-	public void parse(String text) {
-		String[] linesText = text.split(getLineDelimiter());
+	public void parse(String content) {
+		String[] linesText = content.split(getLineDelimiter());
 
 		List<Line> line = getLines().collect(toList());
         IntStream.range(0, linesText.length)
-                 .forEach(idx -> line.get(idx).setValue(linesText[idx]));
+                 .forEach(idx -> line.get(idx).parse(linesText[idx]));
 	}
 
-	public String toText() {
+	public String toContent() {
 	    return lines.stream()
-                    .map(Line::getValue)
+                    .map(Line::toContent)
                     .collect(Collectors.joining(getLineDelimiter()));
 	}
 

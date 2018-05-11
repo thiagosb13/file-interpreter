@@ -19,6 +19,6 @@ public class WritingToPositionalDocumentTest {
         line2.userID.setValue("2-00");
         line2.name.setValue("JOE BLACK");
         
-        assertThat(document.toText(), is("1-00                JOHN DOE                      \r\n2-00                JOE BLACK                     "));
+        assertThat(document.toContent(), is("1-00                JOHN DOE                      \r\n2-00                JOE BLACK                     "));
     }
 }
