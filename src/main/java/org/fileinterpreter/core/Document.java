@@ -39,7 +39,7 @@ public abstract class Document {
 	}
 
 	private String getLineDelimiter() {
-		return lineDelimiter != null ? lineDelimiter : "\r\n";
+		return Optional.ofNullable(lineDelimiter).orElse("\r\n");
 	}
 
 	public void setLineDelimiter(String lineDelimiter) {
