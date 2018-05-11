@@ -1,13 +1,12 @@
 package org.fileinterpreter.core;
 
-import com.google.common.base.Joiner;
+import static java.util.stream.Collectors.toList;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 public abstract class Document {
 	private String lineDelimiter;
@@ -34,10 +33,9 @@ public abstract class Document {
 	}
 
 	public void objectToText() {
-        text = Joiner.on(getLineDelimiter())
-                     .join(lines.stream()
-                                .map(Line::getValue)
-                                .toArray());
+	    text = lines.stream()
+                    .map(Line::getValue)
+                    .collect(Collectors.joining(getLineDelimiter()));
 	}
 
 	private String getLineDelimiter() {

@@ -35,12 +35,8 @@ public class PositionalLine extends Line {
 
     @Override
     protected void objectToText() {
-        StringBuilder line = new StringBuilder();
-        
-        for (PositionalField field : fields) {
-            line.append(field.getRawValue());
-        }
-        
-        value = line.toString();
+        value = fields.stream()
+                      .map(Field::getRawValue)
+                      .reduce("", String::concat);
     }
 }
