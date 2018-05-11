@@ -13,19 +13,7 @@ public abstract class Document {
     private String lineDelimiter;
 	protected List<Line> lines;
 
-	protected String text;
-
-	public String getText() {
-		objectToText();
-		return text;
-	}
-
-	public void setText(String value) {
-		text = value;
-		textToObject();
-	}
-
-	public void textToObject() {
+	public void parse(String text) {
 		String[] linesText = text.split(getLineDelimiter());
 
 		List<Line> line = getLines().collect(toList());
@@ -33,8 +21,8 @@ public abstract class Document {
                  .forEach(idx -> line.get(idx).setValue(linesText[idx]));
 	}
 
-	public void objectToText() {
-	    text = lines.stream()
+	public String toText() {
+	    return lines.stream()
                     .map(Line::getValue)
                     .collect(Collectors.joining(getLineDelimiter()));
 	}

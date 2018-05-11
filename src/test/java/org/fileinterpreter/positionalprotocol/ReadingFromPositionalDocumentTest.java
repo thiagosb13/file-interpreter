@@ -14,7 +14,7 @@ public class ReadingFromPositionalDocumentTest {
     public void shouldFillAllOfPropertiesOfTheObject() {
         Document document = new PositionalDocumentSample();
         document.setLineDelimiter("~");
-        document.setText("1-00                JOHN DOE                      ~2-00                JOE BLACK                     ");
+        document.parse("1-00                JOHN DOE                      ~2-00                JOE BLACK                     ");
         
         PositionalLineSample line1 = (PositionalLineSample)document.getLines().findFirst().get();
         assertThat(line1.userID.getValue(), is("1-00"));
@@ -29,7 +29,7 @@ public class ReadingFromPositionalDocumentTest {
     public void shouldFillOnlyTheFirstLineWithTheText() {
         Document document = new PositionalDocumentSample();
         document.setLineDelimiter("~");
-        document.setText("1-00                JOHN DOE                      ");
+        document.parse("1-00                JOHN DOE                      ");
 
         PositionalLineSample line1 = (PositionalLineSample)document.getLines().findFirst().get();
         assertThat(line1.userID.getValue(), is("1-00"));
