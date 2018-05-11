@@ -9,13 +9,12 @@ public class PositionalField extends Field {
     private char defaultFilling;
     private boolean rtl;
 
-    private PositionalField(Line line) {
-        super(line);
+    private PositionalField() {
         rtl = false;
     }
     
-    public static PositionalField createTo(Line line) {
-        return new PositionalField(line);
+    public static PositionalField create() {
+        return new PositionalField();
     }
     
     public PositionalField named(String name) {

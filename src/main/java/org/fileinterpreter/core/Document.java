@@ -9,7 +9,8 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public abstract class Document {
-	private String lineDelimiter;
+	private static final String BREAK_LINE = "\r\n";
+    private String lineDelimiter;
 	protected List<Line> lines;
 
 	protected String text;
@@ -39,7 +40,7 @@ public abstract class Document {
 	}
 
 	private String getLineDelimiter() {
-		return Optional.ofNullable(lineDelimiter).orElse("\r\n");
+		return Optional.ofNullable(lineDelimiter).orElse(BREAK_LINE);
 	}
 
 	public void setLineDelimiter(String lineDelimiter) {
