@@ -3,44 +3,44 @@ package org.fileinterpreter.core;
 import com.google.common.base.Ascii;
 import com.google.common.base.Strings;
 
-public class PositionalField extends Field {
+public class PositionalField_OLD extends Campo {
     private int startIndex;
     private int size;
     private char defaultFilling;
     private boolean rtl;
 
-    private PositionalField() {
+    private PositionalField_OLD() {
         rtl = false;
     }
     
-    public static PositionalField create() {
-        return new PositionalField();
+    public static PositionalField_OLD create() {
+        return new PositionalField_OLD();
     }
     
-    public PositionalField named(String name) {
-        return (PositionalField) super.named(name);
-    }
-
-    public PositionalField withDefaultValue(String defaultValue) {
-        return (PositionalField) super.withDefaultValue(defaultValue);
-    }
+//    public PositionalField_OLD named(String name) {
+//        return (PositionalField_OLD) super.named(name);
+//    }
+//
+//    public PositionalField_OLD withDefaultValue(String defaultValue) {
+//        return (PositionalField_OLD) super.withDefaultValue(defaultValue);
+//    }
     
-    public PositionalField startingAt(int index) {
+    public PositionalField_OLD startingAt(int index) {
         this.startIndex = index;
         return this;
     }
 
-    public PositionalField withSize(int size) {
+    public PositionalField_OLD withSize(int size) {
         this.size = size;
         return this;
     }
         
-    public Field withDefaultFilling(char defaultFilling) {
+    public Campo withDefaultFilling(char defaultFilling) {
         this.defaultFilling = defaultFilling;
         return this;
     }    
 
-    public PositionalField rtl() {
+    public PositionalField_OLD rtl() {
         this.rtl = true;
         return this;
     }

@@ -18,9 +18,9 @@ public class WritingPositionalLineTest {
 	@Test
     public void shouldCompleteFieldValueWithDefaultFilling() {
         PositionalLineSample sample = new PositionalLineSample();
-        sample.name.withDefaultFilling('*');
+//        sample.name.withDefaultFilling('*');
         sample.name.setValue("JOHN DOE");
-        sample.userID.withDefaultFilling('#');
+//        sample.userID.withDefaultFilling('#');
         sample.userID.setValue("1-00");
         
         assertThat(sample.toContent(), is("1-00################JOHN DOE**********************"));
@@ -46,7 +46,7 @@ public class WritingPositionalLineTest {
     @Test
     public void ifAFieldIsConfiguredToRTLShouldWriteItRightAligned() {
         PositionalLineSample sample = new PositionalLineSample();
-        sample.name.rtl();
+//        sample.name.rtl();
         sample.name.setValue("JOHN DOE");
         sample.userID.setValue("1-00");
         
