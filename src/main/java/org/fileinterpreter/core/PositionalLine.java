@@ -22,15 +22,15 @@ public class PositionalLine extends Line {
 
                 if (content != null) {
                     try {
-                        campo.setValue(content.substring(beginIndex, beginIndex + positionalField.size()));
+                        campo.value = content.substring(beginIndex, beginIndex + positionalField.size());
                     } catch (Exception e) {
-                        campo.setValue("");
+                        campo.value = "";
                         
                         Logger.error(String.format("Could not get the value of the '%s' field from '%s' line.", field.getName(), content));
                         Logger.error(e);
                     }
                 } else {
-                    campo.setValue(positionalField.defaultValue());
+                    campo.value = positionalField.defaultValue();
                 }
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 Logger.error(String.format("Could not get the field from '%s' line.", field.getName(), content));
@@ -49,7 +49,7 @@ public class PositionalLine extends Line {
                 PositionalField positionalField = field.getDeclaredAnnotation(PositionalField.class);
                 
                 Campo campo = (Campo) field.get(this);
-                String rawValue = campo.getRawValue() != null ? campo.getRawValue() : positionalField.defaultValue();
+                String rawValue = campo.value != null ? campo.value : positionalField.defaultValue();
                 builder.append(trunc(pad(rawValue, positionalField.size(), positionalField.rtl(), positionalField.spaceFilling()), positionalField.size()));
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 Logger.error(String.format("Could not get the field '%s'.", field.getName()));

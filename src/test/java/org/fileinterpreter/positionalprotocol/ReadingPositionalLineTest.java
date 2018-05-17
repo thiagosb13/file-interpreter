@@ -8,21 +8,12 @@ import org.junit.Test;
 public class ReadingPositionalLineTest {
     
     @Test
-    public void shouldSplitFieldsFillInRawValuesBasedOnConfiguration() {
+    public void shouldSplitFieldsFillInValuesBasedOnConfiguration() {
         PositionalLineSample sample = new PositionalLineSample();
         sample.parse("1-00                JOHN DOE                      ");
         
-        assertThat(sample.userID.getRawValue(), is("1-00                "));
-        assertThat(sample.name.getRawValue(), is("JOHN DOE                      "));
-    }
-
-    @Test
-    public void shouldSplitFieldsAndTrimValuesBasedOnConfiguration() {
-        PositionalLineSample sample = new PositionalLineSample();
-        sample.parse("1-00                JOHN DOE                      ");
-
-        assertThat(sample.userID.getValue(), is("1-00"));
-        assertThat(sample.name.getValue(), is("JOHN DOE"));
+        assertThat(sample.userID.value, is("1-00                "));
+        assertThat(sample.name.value, is("JOHN DOE                      "));
     }
 
     @Test
@@ -30,7 +21,7 @@ public class ReadingPositionalLineTest {
         PositionalLineSample sample = new PositionalLineSample();
         sample.parse("1-00                JOHN DOE      ");
         
-        assertThat(sample.userID.getValue(), is("1-00"));
-        assertThat(sample.name.getValue(), is(""));
+        assertThat(sample.userID.value.trim(), is("1-00"));
+        assertThat(sample.name.value.trim(), is(""));
     }
 }
