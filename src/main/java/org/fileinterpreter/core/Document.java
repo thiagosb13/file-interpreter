@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public abstract class Document {
@@ -15,10 +14,14 @@ public abstract class Document {
 
 	public void parse(String content) {
 		String[] linesText = content.split(getLineDelimiter());
+		int linesContentSize = linesText.length;
 
-		List<Line> line = getLines().collect(toList());
-        IntStream.range(0, linesText.length)
-                 .forEach(idx -> line.get(idx).parse(linesText[idx]));
+		List<Line> lineList = getLines().collect(toList());
+		
+		for (int i = 0; i < lineList.size(); i++) {
+		    String contentLine = i < linesContentSize ? linesText[i] : null;
+            lineList.get(i).parse(contentLine);
+		}
 	}
 
 	public String toContent() {
