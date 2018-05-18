@@ -18,20 +18,20 @@ public class PositionalLine extends Line {
             int beginIndex = positionalField.startIndex() - 1;
 
             try {
-                Campo campo = (Campo) field.get(this);
+                String value = "";
 
                 if (content != null) {
                     try {
-                        campo.value = content.substring(beginIndex, beginIndex + positionalField.size());
+                        value = content.substring(beginIndex, beginIndex + positionalField.size());
                     } catch (Exception e) {
-                        campo.value = "";
-                        
                         Logger.error(String.format("Could not get the value of the '%s' field from '%s' line.", field.getName(), content));
                         Logger.error(e);
                     }
                 } else {
-                    campo.value = positionalField.defaultValue();
+                    value = positionalField.defaultValue();
                 }
+
+                field.set(this, value);
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 Logger.error(String.format("Could not get the field from '%s' line.", field.getName(), content));
                 Logger.error(e);
@@ -48,8 +48,8 @@ public class PositionalLine extends Line {
             try {
                 PositionalField positionalField = field.getDeclaredAnnotation(PositionalField.class);
                 
-                Campo campo = (Campo) field.get(this);
-                String rawValue = campo.value != null ? campo.value : positionalField.defaultValue();
+                Object value = field.get(this);
+                String rawValue = value != null ? value.toString() : positionalField.defaultValue();
                 builder.append(trunc(pad(rawValue, positionalField.size(), positionalField.rtl(), positionalField.spaceFilling()), positionalField.size()));
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 Logger.error(String.format("Could not get the field '%s'.", field.getName()));

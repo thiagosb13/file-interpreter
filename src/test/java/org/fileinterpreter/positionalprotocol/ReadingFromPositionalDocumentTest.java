@@ -17,12 +17,12 @@ public class ReadingFromPositionalDocumentTest {
         document.parse("1-00                JOHN DOE                      ~2-00                JOE BLACK                     ");
         
         PositionalLineSample line1 = (PositionalLineSample)document.getLines().findFirst().get();
-        assertThat(line1.userID.value.trim(), is("1-00"));
-        assertThat(line1.name.value.trim(), is("JOHN DOE"));
+        assertThat(line1.userID.trim(), is("1-00"));
+        assertThat(line1.name.trim(), is("JOHN DOE"));
         
         PositionalLineSample line2 = (PositionalLineSample)document.getLines().skip(1).findFirst().get();
-        assertThat(line2.userID.value.trim(), is("2-00"));
-        assertThat(line2.name.value.trim(), is("JOE BLACK"));
+        assertThat(line2.userID.trim(), is("2-00"));
+        assertThat(line2.name.trim(), is("JOE BLACK"));
     }
 
     @Test
@@ -32,11 +32,11 @@ public class ReadingFromPositionalDocumentTest {
         document.parse("1-00                JOHN DOE                      ");
 
         PositionalLineSample line1 = (PositionalLineSample)document.getLines().findFirst().get();
-        assertThat(line1.userID.value.trim(), is("1-00"));
-        assertThat(line1.name.value.trim(), is("JOHN DOE"));
+        assertThat(line1.userID.trim(), is("1-00"));
+        assertThat(line1.name.trim(), is("JOHN DOE"));
 
         PositionalLineSample line2 = (PositionalLineSample)document.getLines().skip(1).findFirst().get();
-        assertThat(line2.userID.value, isEmptyString());
-        assertThat(line2.name.value, is(equalTo("NC")));
+        assertThat(line2.userID, isEmptyString());
+        assertThat(line2.name, is(equalTo("NC")));
     }
 }

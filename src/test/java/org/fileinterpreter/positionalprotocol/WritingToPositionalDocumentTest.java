@@ -12,12 +12,12 @@ public class WritingToPositionalDocumentTest {
     public void shouldTransfomLineIntoPlainText() {
         Document document = new PositionalDocumentSample();
         PositionalLineSample line1 = (PositionalLineSample)document.getLines().findFirst().get();
-        line1.userID.value = "1-00";
-        line1.name.value = "JOHN DOE";
+        line1.userID = "1-00";
+        line1.name = "JOHN DOE";
 
         PositionalLineSample line2 = (PositionalLineSample)document.getLines().skip(1).findFirst().get();
-        line2.userID.value = "2-00";
-        line2.name.value = "JOE BLACK";
+        line2.userID = "2-00";
+        line2.name = "JOE BLACK";
         
         assertThat(document.toContent(), is("1-00                JOHN DOE                      \r\n2-00                JOE BLACK                     "));
     }

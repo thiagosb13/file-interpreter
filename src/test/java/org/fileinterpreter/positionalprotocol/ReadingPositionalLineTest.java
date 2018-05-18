@@ -12,8 +12,8 @@ public class ReadingPositionalLineTest {
         PositionalLineSample sample = new PositionalLineSample();
         sample.parse("1-00                JOHN DOE                      ");
         
-        assertThat(sample.userID.value, is("1-00                "));
-        assertThat(sample.name.value, is("JOHN DOE                      "));
+        assertThat(sample.userID, is("1-00                "));
+        assertThat(sample.name, is("JOHN DOE                      "));
     }
 
     @Test
@@ -21,7 +21,7 @@ public class ReadingPositionalLineTest {
         PositionalLineSample sample = new PositionalLineSample();
         sample.parse("1-00                JOHN DOE      ");
         
-        assertThat(sample.userID.value.trim(), is("1-00"));
-        assertThat(sample.name.value.trim(), is(""));
+        assertThat(sample.userID.trim(), is("1-00"));
+        assertThat(sample.name.trim(), is(""));
     }
 }
