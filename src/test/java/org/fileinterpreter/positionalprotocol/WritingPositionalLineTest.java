@@ -8,38 +8,50 @@ import org.junit.Test;
 
 public class WritingPositionalLineTest {
 	@Test
-	public void shouldBuildTheObjectBasedOnFieldsDefinition() {
+	public void shouldBuildTheObjectBasedOnFieldsDefinition() throws InstantiationException, IllegalAccessException {
 		PositionalLineSample sample = new PositionalLineSample();
 		sample.name = "JOHN DOE";
 		sample.userID = "1-00";
 		
-		assertThat(sample.toContent(), is("1-00                JOHN DOE                      "));
+		PositionalLine positionalLine = sample.getClass().getDeclaredAnnotation(PositionalLine.class);
+		
+		assertThat(positionalLine.parser().newInstance().toContent(sample), 
+		           is("1-00                JOHN DOE                      "));
 	}
 
 	@Test
-    public void shouldCompleteFieldValueWithDefaultFilling() {
+    public void shouldCompleteFieldValueWithDefaultFilling() throws InstantiationException, IllegalAccessException {
 	    PositionalLineWithDefaultFillingSample sample = new PositionalLineWithDefaultFillingSample();
         sample.name = "JOHN DOE";
         sample.userID = "1-00";
         
-        assertThat(sample.toContent(), is("1-00################JOHN DOE**********************"));
+        PositionalLine positionalLine = sample.getClass().getDeclaredAnnotation(PositionalLine.class);
+        
+        assertThat(positionalLine.parser().newInstance().toContent(sample), 
+                   is("1-00################JOHN DOE**********************"));
     }
     
     @Test
-    public void shouldTruncFieldsToSizeDefinition() {
+    public void shouldTruncFieldsToSizeDefinition() throws InstantiationException, IllegalAccessException {
         PositionalLineSample sample = new PositionalLineSample();
         sample.name = "JOHN DOE 999999999999999999999999999999";
         sample.userID = "1-00 99999999999999999999999999999999";
 
-        assertThat(sample.toContent(), is("1-00 999999999999999JOHN DOE 999999999999999999999"));
+        PositionalLine positionalLine = sample.getClass().getDeclaredAnnotation(PositionalLine.class);
+        
+        assertThat(positionalLine.parser().newInstance().toContent(sample), 
+                   is("1-00 999999999999999JOHN DOE 999999999999999999999"));
     }
 
     @Test
-    public void whenValueIsNotFilledShouldUseDefaultValue() {
+    public void whenValueIsNotFilledShouldUseDefaultValue() throws InstantiationException, IllegalAccessException {
         PositionalLineSample sample = new PositionalLineSample();
         sample.userID = "1-00";
         
-        assertThat(sample.toContent(), is("1-00                NC                            "));
+        PositionalLine positionalLine = sample.getClass().getDeclaredAnnotation(PositionalLine.class);
+        
+        assertThat(positionalLine.parser().newInstance().toContent(sample), 
+                   is("1-00                NC                            "));
     }
     
     @Test

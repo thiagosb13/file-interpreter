@@ -1,4 +1,4 @@
-package org.fileinterpreter.core;
+package org.fileinterpreter.parser;
 
 import java.lang.reflect.Field;
 
@@ -8,9 +8,11 @@ import org.pmw.tinylog.Logger;
 import com.google.common.base.Ascii;
 import com.google.common.base.Strings;
 
-public class PositionalLineParser extends Line {
-    public void parse(String content) {
-        Field[] fields = this.getClass().getFields();
+public class PositionalLineParser extends LineParser {
+
+    @Override
+    public void parse(String content, Object object) {
+        Field[] fields = object.getClass().getFields();
 
         for (Field field : fields) {
             PositionalField positionalField = field.getDeclaredAnnotation(PositionalField.class);
@@ -31,33 +33,12 @@ public class PositionalLineParser extends Line {
                     value = positionalField.defaultValue();
                 }
 
-                field.set(this, value);
+                field.set(object, value);
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 Logger.error(String.format("Could not get the field from '%s' line.", field.getName(), content));
                 Logger.error(e);
             }
         }
-    }
-
-    @Override
-    public String toContent() {
-        StringBuilder builder = new StringBuilder();
-        Field[] fields = this.getClass().getFields();
-
-        for (Field field : fields) {
-            try {
-                PositionalField positionalField = field.getDeclaredAnnotation(PositionalField.class);
-                
-                Object value = field.get(this);
-                String rawValue = value != null ? value.toString() : positionalField.defaultValue();
-                builder.append(trunc(pad(rawValue, positionalField.size(), positionalField.rtl(), positionalField.spaceFilling()), positionalField.size()));
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                Logger.error(String.format("Could not get the field '%s'.", field.getName()));
-                Logger.error(e);
-            }
-        } 
-        
-        return builder.toString();
     }
 
     @Override

@@ -7,27 +7,33 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class Document {
+import org.fileinterpreter.parser.LineParser;
+
+public class DocumentParser_OLD {
 	private static final String BREAK_LINE = "\r\n";
     private String lineDelimiter;
-	protected List<Line> lines;
+	protected List<LineParser> lines;
 
 	public void parse(String content) {
 		String[] linesText = content.split(getLineDelimiter());
 		int linesContentSize = linesText.length;
 
-		List<Line> lineList = getLines().collect(toList());
+		List<LineParser> lineList = getLines().collect(toList());
 		
 		for (int i = 0; i < lineList.size(); i++) {
 		    String contentLine = i < linesContentSize ? linesText[i] : null;
-            lineList.get(i).parse(contentLine);
+            //lineList.get(i).parse(contentLine);
 		}
 	}
 
 	public String toContent() {
-	    return lines.stream()
-                    .map(Line::toContent)
-                    .collect(Collectors.joining(getLineDelimiter()));
+	    return ""; //lines.stream()
+//                    .map(LineParser::toContent)
+//                    .collect(Collectors.joining(getLineDelimiter()));
+	}
+	
+	public String toContent(List<Object> lines) {
+	    return "";
 	}
 
 	private String getLineDelimiter() {
@@ -38,7 +44,7 @@ public abstract class Document {
 		this.lineDelimiter = lineDelimiter;
 	}
 
-	public Stream<Line> getLines() {
+	public Stream<LineParser> getLines() {
         return Optional.ofNullable(lines).map(List::stream).orElseGet(Stream::empty);
 	}
 }

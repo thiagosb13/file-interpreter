@@ -1,24 +1,23 @@
 package org.fileinterpreter.positionalprotocol;
 
-import org.fileinterpreter.core.Document;
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import org.fileinterpreter.parser.DocumentParser;
+import org.junit.Test;
 
 public class WritingToPositionalDocumentTest {
 
     @Test
     public void shouldTransfomLineIntoPlainText() {
-        Document document = new PositionalDocumentSample();
-        PositionalLineSample line1 = (PositionalLineSample)document.getLines().findFirst().get();
-        line1.userID = "1-00";
-        line1.name = "JOHN DOE";
+        PositionalDocumentSample document = new PositionalDocumentSample();
+        DocumentParser<PositionalDocumentSample> parser = new DocumentParser<>(document);
+        document.line1.userID = "1-00";
+        document.line1.name = "JOHN DOE";
 
-        PositionalLineSample line2 = (PositionalLineSample)document.getLines().skip(1).findFirst().get();
-        line2.userID = "2-00";
-        line2.name = "JOE BLACK";
+        document.line2.userID = "2-00";
+        document.line2.name = "JOE BLACK";
         
-        assertThat(document.toContent(), is("1-00                JOHN DOE                      \r\n2-00                JOE BLACK                     "));
+        assertThat(parser.toContent(), is("1-00                JOHN DOE                      \r\n2-00                JOE BLACK                     "));
     }
 }

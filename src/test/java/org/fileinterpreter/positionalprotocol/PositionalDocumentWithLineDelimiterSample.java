@@ -2,8 +2,8 @@ package org.fileinterpreter.positionalprotocol;
 
 import org.fileinterpreter.annotation.Document;
 
-@Document
-class PositionalDocumentSample {
+@Document(lineDelimiter = "~")
+class PositionalDocumentWithLineDelimiterSample {
     PositionalLineSample line1;
     PositionalLineSample line2;
 }

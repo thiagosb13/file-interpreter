@@ -1,9 +1,10 @@
 package org.fileinterpreter.positionalprotocol;
 
 import org.fileinterpreter.annotation.PositionalField;
-import org.fileinterpreter.core.PositionalLineParser;
+import org.fileinterpreter.annotation.PositionalLine;
 
-public class PositionalLineSample extends PositionalLineParser {
+@PositionalLine
+public class PositionalLineSample {
     @PositionalField(name = "User ID", startIndex = 1, size = 20)
     public String userID;
     @PositionalField(name = "User Name", startIndex = 21, size = 30, defaultValue = "NC")
