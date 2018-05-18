@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import org.fileinterpreter.core.Document;
 
-class PositionalWithDefaultFillingDocumentSample extends Document {
-    public PositionalWithDefaultFillingDocumentSample() {
+class PositionalDocumentWithDefaultFillingSample extends Document {
+    public PositionalDocumentWithDefaultFillingSample() {
         lines = new ArrayList<>();
         
         PositionalLineWithDefaultFillingSample line1 = new PositionalLineWithDefaultFillingSample();

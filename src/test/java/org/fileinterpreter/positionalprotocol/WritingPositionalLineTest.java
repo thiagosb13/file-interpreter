@@ -3,6 +3,7 @@ package org.fileinterpreter.positionalprotocol;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.fileinterpreter.annotation.PositionalLine;
 import org.junit.Test;
 
 public class WritingPositionalLineTest {
@@ -42,11 +43,13 @@ public class WritingPositionalLineTest {
     }
     
     @Test
-    public void ifAFieldIsConfiguredToRTLShouldWriteItRightAligned() {
+    public void ifAFieldIsConfiguredToRTLShouldWriteItRightAligned() throws InstantiationException, IllegalAccessException {
         PositionalLineRTLSample sample = new PositionalLineRTLSample();
         sample.name = "JOHN DOE";
         sample.userID = "1-00";
         
-        assertThat(sample.toContent(), is("1-00                                      JOHN DOE"));
+        PositionalLine positionalLine = sample.getClass().getDeclaredAnnotation(PositionalLine.class);
+        
+        assertThat(positionalLine.parser().newInstance().toContent(sample), is("1-00                                      JOHN DOE"));
     }
 }
