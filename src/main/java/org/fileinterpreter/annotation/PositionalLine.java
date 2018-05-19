@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 import org.fileinterpreter.parser.PositionalLineParser;
 
-@Target({ ElementType.TYPE, ElementType.FIELD })
+@Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PositionalLine {
     Class<PositionalLineParser> parser() default PositionalLineParser.class;

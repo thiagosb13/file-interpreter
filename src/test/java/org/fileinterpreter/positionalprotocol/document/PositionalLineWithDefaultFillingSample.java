@@ -3,7 +3,6 @@ package org.fileinterpreter.positionalprotocol.document;
 import org.fileinterpreter.annotation.PositionalField;
 import org.fileinterpreter.annotation.PositionalLine;
 
-@PositionalLine
 public class PositionalLineWithDefaultFillingSample {
     @PositionalField(name = "User ID", startIndex = 1, size = 20, spaceFilling = '#')
     public String userID;

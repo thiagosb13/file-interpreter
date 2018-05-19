@@ -3,7 +3,7 @@ package org.fileinterpreter.positionalprotocol;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.fileinterpreter.annotation.PositionalLine;
+import org.fileinterpreter.parser.PositionalLineParser;
 import org.fileinterpreter.positionalprotocol.document.PositionalLineRTLSample;
 import org.fileinterpreter.positionalprotocol.document.PositionalLineSample;
 import org.fileinterpreter.positionalprotocol.document.PositionalLineWithDefaultFillingSample;
@@ -16,10 +16,8 @@ public class WritingPositionalLineTest {
 		sample.name = "JOHN DOE";
 		sample.userID = "1-00";
 		
-		PositionalLine positionalLine = sample.getClass().getDeclaredAnnotation(PositionalLine.class);
-		
-		assertThat(positionalLine.parser().newInstance().toContent(sample), 
-		           is("1-00                JOHN DOE                      "));
+		PositionalLineParser parser = new PositionalLineParser();
+        assertThat(parser.toContent(sample), is("1-00                JOHN DOE                      "));
 	}
 
 	@Test
@@ -28,10 +26,8 @@ public class WritingPositionalLineTest {
         sample.name = "JOHN DOE";
         sample.userID = "1-00";
         
-        PositionalLine positionalLine = sample.getClass().getDeclaredAnnotation(PositionalLine.class);
-        
-        assertThat(positionalLine.parser().newInstance().toContent(sample), 
-                   is("1-00################JOHN DOE**********************"));
+        PositionalLineParser parser = new PositionalLineParser();
+        assertThat(parser.toContent(sample), is("1-00################JOHN DOE**********************"));
     }
     
     @Test
@@ -40,10 +36,8 @@ public class WritingPositionalLineTest {
         sample.name = "JOHN DOE 999999999999999999999999999999";
         sample.userID = "1-00 99999999999999999999999999999999";
 
-        PositionalLine positionalLine = sample.getClass().getDeclaredAnnotation(PositionalLine.class);
-        
-        assertThat(positionalLine.parser().newInstance().toContent(sample), 
-                   is("1-00 999999999999999JOHN DOE 999999999999999999999"));
+        PositionalLineParser parser = new PositionalLineParser();
+        assertThat(parser.toContent(sample), is("1-00 999999999999999JOHN DOE 999999999999999999999"));
     }
 
     @Test
@@ -51,10 +45,8 @@ public class WritingPositionalLineTest {
         PositionalLineSample sample = new PositionalLineSample();
         sample.userID = "1-00";
         
-        PositionalLine positionalLine = sample.getClass().getDeclaredAnnotation(PositionalLine.class);
-        
-        assertThat(positionalLine.parser().newInstance().toContent(sample), 
-                   is("1-00                NC                            "));
+        PositionalLineParser parser = new PositionalLineParser();
+        assertThat(parser.toContent(sample), is("1-00                NC                            "));
     }
     
     @Test
@@ -63,8 +55,7 @@ public class WritingPositionalLineTest {
         sample.name = "JOHN DOE";
         sample.userID = "1-00";
         
-        PositionalLine positionalLine = sample.getClass().getDeclaredAnnotation(PositionalLine.class);
-        
-        assertThat(positionalLine.parser().newInstance().toContent(sample), is("1-00                                      JOHN DOE"));
+        PositionalLineParser parser = new PositionalLineParser();
+        assertThat(parser.toContent(sample), is("1-00                                      JOHN DOE"));
     }
 }
