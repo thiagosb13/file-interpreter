@@ -16,10 +16,7 @@ public class PositionalLineParser extends LineParser {
         Field[] fields = object.getClass().getFields();
 
         for (Field field : fields) {
-            PositionalField positionalField = field.getDeclaredAnnotation(PositionalField.class);
-
-            if (positionalField == null)
-            	throw new MisconfiguredDocumentException(String.format("Field '%s' is not annotated correctly.", field.getName()));
+            PositionalField positionalField = getPositionalFieldFrom(field);
 
             int beginIndex = positionalField.startIndex() - 1;
 
@@ -52,11 +49,8 @@ public class PositionalLineParser extends LineParser {
 
         for (Field field : fields) {
             try {
-                PositionalField positionalField = field.getDeclaredAnnotation(PositionalField.class);
-                
-                if (positionalField == null)
-                	throw new MisconfiguredDocumentException(String.format("Field '%s' is not annotated correctly.", field.getName()));
-                
+            	PositionalField positionalField = getPositionalFieldFrom(field);
+            	
                 Object value = field.get(line);
                 String rawValue = value != null ? value.toString() : positionalField.defaultValue();
                 builder.append(trunc(pad(rawValue, positionalField.size(), positionalField.rtl(), positionalField.spaceFilling()), positionalField.size()));
@@ -67,6 +61,15 @@ public class PositionalLineParser extends LineParser {
         } 
         
         return builder.toString();
+    }
+    
+    private PositionalField getPositionalFieldFrom(Field field) throws MisconfiguredDocumentException {
+    	PositionalField positionalField = field.getDeclaredAnnotation(PositionalField.class);
+    	
+    	if (positionalField == null)
+    		throw new MisconfiguredDocumentException(String.format("Field '%s' is not annotated correctly.", field.getName()));
+    	
+    	return positionalField;
     }
     
     private String pad(String value, int size, boolean rtl, char defaultFilling) {

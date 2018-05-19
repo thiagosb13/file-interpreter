@@ -24,10 +24,7 @@ public class DocumentParser<T> {
 
         for (Field field : fields) {
             try {
-                PositionalLine positionalLine = field.getDeclaredAnnotation(PositionalLine.class);
-                
-                if (positionalLine == null)
-                	throw new MisconfiguredDocumentException(String.format("Line '%s' is not annotated correctly.", field.getName()));
+                PositionalLine positionalLine = getPositionalLineFrom(field);
 
                 Object line = field.get(templateClass);
 
@@ -55,10 +52,7 @@ public class DocumentParser<T> {
         for (int i = 0; i < fields.length; i++) {
             String contentLine = i < linesContentSize ? linesText[i] : null;
             
-            PositionalLine positionalLine = fields[i].getDeclaredAnnotation(PositionalLine.class);
-            
-            if (positionalLine == null)
-            	throw new MisconfiguredDocumentException(String.format("Line '%s' is not annotated correctly.", fields[i].getName()));
+            PositionalLine positionalLine = getPositionalLineFrom(fields[i]);
 
             try {
                 Object line = fields[i].get(templateClass);
@@ -68,6 +62,15 @@ public class DocumentParser<T> {
                 e.printStackTrace();
             }
         }        
+    }
+    
+    private PositionalLine getPositionalLineFrom(Field field) throws MisconfiguredDocumentException {
+    	PositionalLine positionalLine = field.getDeclaredAnnotation(PositionalLine.class);
+    	
+    	if (positionalLine == null)
+    		throw new MisconfiguredDocumentException(String.format("Line '%s' is not annotated correctly.", field.getName()));
+    	
+    	return positionalLine;
     }
     
     private String getLineDelimiter() {
