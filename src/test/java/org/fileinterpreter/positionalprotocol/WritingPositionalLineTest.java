@@ -3,53 +3,60 @@ package org.fileinterpreter.positionalprotocol;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.fileinterpreter.exception.MisconfiguredDocumentException;
+import org.fileinterpreter.parser.PositionalLineParser;
+import org.fileinterpreter.positionalprotocol.document.PositionalLineRTLSample;
+import org.fileinterpreter.positionalprotocol.document.PositionalLineSample;
+import org.fileinterpreter.positionalprotocol.document.PositionalLineWithDefaultFillingSample;
 import org.junit.Test;
 
 public class WritingPositionalLineTest {
 	@Test
-	public void shouldBuildTheObjectBasedOnFieldsDefinition() {
+	public void shouldBuildTheObjectBasedOnFieldsDefinition() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
 		PositionalLineSample sample = new PositionalLineSample();
-		sample.name.setValue("JOHN DOE");
-		sample.userID.setValue("1-00");
+		sample.name = "JOHN DOE";
+		sample.userID = "1-00";
 		
-		assertThat(sample.toContent(), is("1-00                JOHN DOE                      "));
+		PositionalLineParser parser = new PositionalLineParser();
+        assertThat(parser.toContent(sample), is("1-00                JOHN DOE                      "));
 	}
 
 	@Test
-    public void shouldCompleteFieldValueWithDefaultFilling() {
-        PositionalLineSample sample = new PositionalLineSample();
-        sample.name.withDefaultFilling('*');
-        sample.name.setValue("JOHN DOE");
-        sample.userID.withDefaultFilling('#');
-        sample.userID.setValue("1-00");
+    public void shouldCompleteFieldValueWithDefaultFilling() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
+	    PositionalLineWithDefaultFillingSample sample = new PositionalLineWithDefaultFillingSample();
+        sample.name = "JOHN DOE";
+        sample.userID = "1-00";
         
-        assertThat(sample.toContent(), is("1-00################JOHN DOE**********************"));
+        PositionalLineParser parser = new PositionalLineParser();
+        assertThat(parser.toContent(sample), is("1-00################JOHN DOE**********************"));
     }
     
     @Test
-    public void shouldTruncFieldsToSizeDefinition() {
+    public void shouldTruncFieldsToSizeDefinition() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
         PositionalLineSample sample = new PositionalLineSample();
-        sample.name.setValue("JOHN DOE 999999999999999999999999999999");
-        sample.userID.setValue("1-00 99999999999999999999999999999999");
+        sample.name = "JOHN DOE 999999999999999999999999999999";
+        sample.userID = "1-00 99999999999999999999999999999999";
 
-        assertThat(sample.toContent(), is("1-00 999999999999999JOHN DOE 999999999999999999999"));
+        PositionalLineParser parser = new PositionalLineParser();
+        assertThat(parser.toContent(sample), is("1-00 999999999999999JOHN DOE 999999999999999999999"));
     }
 
     @Test
-    public void whenValueIsNotFilledShouldUseDefaultValue() {
+    public void whenValueIsNotFilledShouldUseDefaultValue() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
         PositionalLineSample sample = new PositionalLineSample();
-        sample.userID.setValue("1-00");
+        sample.userID = "1-00";
         
-        assertThat(sample.toContent(), is("1-00                NC                            "));
+        PositionalLineParser parser = new PositionalLineParser();
+        assertThat(parser.toContent(sample), is("1-00                NC                            "));
     }
     
     @Test
-    public void ifAFieldIsConfiguredToRTLShouldWriteItRightAligned() {
-        PositionalLineSample sample = new PositionalLineSample();
-        sample.name.rtl();
-        sample.name.setValue("JOHN DOE");
-        sample.userID.setValue("1-00");
+    public void ifAFieldIsConfiguredToRTLShouldWriteItRightAligned() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
+        PositionalLineRTLSample sample = new PositionalLineRTLSample();
+        sample.name = "JOHN DOE";
+        sample.userID = "1-00";
         
-        assertThat(sample.toContent(), is("1-00                                      JOHN DOE"));
+        PositionalLineParser parser = new PositionalLineParser();
+        assertThat(parser.toContent(sample), is("1-00                                      JOHN DOE"));
     }
 }
