@@ -3,6 +3,7 @@ package org.fileinterpreter.positionalprotocol;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.parser.PositionalLineParser;
 import org.fileinterpreter.positionalprotocol.document.PositionalLineRTLSample;
 import org.fileinterpreter.positionalprotocol.document.PositionalLineSample;
@@ -11,7 +12,7 @@ import org.junit.Test;
 
 public class WritingPositionalLineTest {
 	@Test
-	public void shouldBuildTheObjectBasedOnFieldsDefinition() throws InstantiationException, IllegalAccessException {
+	public void shouldBuildTheObjectBasedOnFieldsDefinition() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
 		PositionalLineSample sample = new PositionalLineSample();
 		sample.name = "JOHN DOE";
 		sample.userID = "1-00";
@@ -21,7 +22,7 @@ public class WritingPositionalLineTest {
 	}
 
 	@Test
-    public void shouldCompleteFieldValueWithDefaultFilling() throws InstantiationException, IllegalAccessException {
+    public void shouldCompleteFieldValueWithDefaultFilling() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
 	    PositionalLineWithDefaultFillingSample sample = new PositionalLineWithDefaultFillingSample();
         sample.name = "JOHN DOE";
         sample.userID = "1-00";
@@ -31,7 +32,7 @@ public class WritingPositionalLineTest {
     }
     
     @Test
-    public void shouldTruncFieldsToSizeDefinition() throws InstantiationException, IllegalAccessException {
+    public void shouldTruncFieldsToSizeDefinition() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
         PositionalLineSample sample = new PositionalLineSample();
         sample.name = "JOHN DOE 999999999999999999999999999999";
         sample.userID = "1-00 99999999999999999999999999999999";
@@ -41,7 +42,7 @@ public class WritingPositionalLineTest {
     }
 
     @Test
-    public void whenValueIsNotFilledShouldUseDefaultValue() throws InstantiationException, IllegalAccessException {
+    public void whenValueIsNotFilledShouldUseDefaultValue() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
         PositionalLineSample sample = new PositionalLineSample();
         sample.userID = "1-00";
         
@@ -50,7 +51,7 @@ public class WritingPositionalLineTest {
     }
     
     @Test
-    public void ifAFieldIsConfiguredToRTLShouldWriteItRightAligned() throws InstantiationException, IllegalAccessException {
+    public void ifAFieldIsConfiguredToRTLShouldWriteItRightAligned() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
         PositionalLineRTLSample sample = new PositionalLineRTLSample();
         sample.name = "JOHN DOE";
         sample.userID = "1-00";

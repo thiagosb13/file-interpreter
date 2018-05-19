@@ -3,6 +3,7 @@ package org.fileinterpreter.positionalprotocol;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.parser.DocumentParser;
 import org.fileinterpreter.positionalprotocol.document.PositionalDocumentSample;
 import org.junit.Test;
@@ -10,7 +11,7 @@ import org.junit.Test;
 public class WritingToPositionalDocumentTest {
 
     @Test
-    public void shouldTransfomLineIntoPlainText() {
+    public void shouldTransfomLineIntoPlainText() throws MisconfiguredDocumentException {
         PositionalDocumentSample document = new PositionalDocumentSample();
         document.line1.userID = "1-00";
         document.line1.name = "JOHN DOE";

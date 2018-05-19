@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.text.IsEmptyString.isEmptyString;
 import static org.junit.Assert.assertThat;
 
+import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.parser.DocumentParser;
 import org.fileinterpreter.positionalprotocol.document.PositionalDocumentOrderedSample;
 import org.fileinterpreter.positionalprotocol.document.PositionalDocumentWithLineDelimiterSample;
@@ -13,7 +14,7 @@ import org.junit.Test;
 public class ReadingFromPositionalDocumentTest {
 
     @Test
-    public void shouldFillAllOfPropertiesOfTheObject() {
+    public void shouldFillAllOfPropertiesOfTheObject() throws MisconfiguredDocumentException {
         PositionalDocumentWithLineDelimiterSample document = new PositionalDocumentWithLineDelimiterSample();
         DocumentParser<PositionalDocumentWithLineDelimiterSample> parser = new DocumentParser<>(document);
         parser.parse("1-00                JOHN DOE                      ~2-00                JOE BLACK                     ");
@@ -26,7 +27,7 @@ public class ReadingFromPositionalDocumentTest {
     }
 
     @Test
-    public void shouldFillOnlyTheFirstLineWithTheText() {
+    public void shouldFillOnlyTheFirstLineWithTheText() throws MisconfiguredDocumentException {
         PositionalDocumentWithLineDelimiterSample document = new PositionalDocumentWithLineDelimiterSample();
         DocumentParser<PositionalDocumentWithLineDelimiterSample> parser = new DocumentParser<>(document);
         parser.parse("1-00                JOHN DOE                      ");
@@ -39,7 +40,7 @@ public class ReadingFromPositionalDocumentTest {
     }
     
     @Test
-    public void fieldsShouldBeProcessedInOrderOfDeclaration() {
+    public void fieldsShouldBeProcessedInOrderOfDeclaration() throws MisconfiguredDocumentException {
         PositionalDocumentOrderedSample document = new PositionalDocumentOrderedSample();
         DocumentParser<PositionalDocumentOrderedSample> parser = new DocumentParser<>(document);
         parser.parse("1-00                JOHN DOE                      ~2-00                JOE BLACK                     ~3-00                BILL WARD                     ");

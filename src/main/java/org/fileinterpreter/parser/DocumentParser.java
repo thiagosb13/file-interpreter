@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.fileinterpreter.annotation.Document;
 import org.fileinterpreter.annotation.PositionalLine;
+import org.fileinterpreter.exception.MisconfiguredDocumentException;
 
 public class DocumentParser<T> {
     private T templateClass;
@@ -16,7 +17,7 @@ public class DocumentParser<T> {
         this.templateClass = Objects.requireNonNull(templateClass);
     }
 
-    public String toContent() {
+    public String toContent() throws MisconfiguredDocumentException {
         List<String> lines = new ArrayList<>();
 
         Field[] fields = templateClass.getClass().getFields();
@@ -24,6 +25,9 @@ public class DocumentParser<T> {
         for (Field field : fields) {
             try {
                 PositionalLine positionalLine = field.getDeclaredAnnotation(PositionalLine.class);
+                
+                if (positionalLine == null)
+                	throw new MisconfiguredDocumentException(String.format("Line '%s' is not annotated correctly.", field.getName()));
 
                 Object line = field.get(templateClass);
 
@@ -40,7 +44,7 @@ public class DocumentParser<T> {
                     .collect(Collectors.joining(getLineDelimiter()));
     }
 
-    public void parse(String content) {
+    public void parse(String content) throws MisconfiguredDocumentException {
         Objects.requireNonNull(content);
 
         String[] linesText = content.split(getLineDelimiter());
@@ -52,6 +56,9 @@ public class DocumentParser<T> {
             String contentLine = i < linesContentSize ? linesText[i] : null;
             
             PositionalLine positionalLine = fields[i].getDeclaredAnnotation(PositionalLine.class);
+            
+            if (positionalLine == null)
+            	throw new MisconfiguredDocumentException(String.format("Line '%s' is not annotated correctly.", fields[i].getName()));
 
             try {
                 Object line = fields[i].get(templateClass);
