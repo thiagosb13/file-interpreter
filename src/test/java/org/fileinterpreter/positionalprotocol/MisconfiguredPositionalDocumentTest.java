@@ -1,13 +1,14 @@
 package org.fileinterpreter.positionalprotocol;
 
+import org.fileinterpreter.annotation.Document;
+import org.fileinterpreter.annotation.PositionalField;
+import org.fileinterpreter.annotation.PositionalLine;
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.parser.DocumentParser;
 import org.fileinterpreter.parser.PositionalLineParser;
-import org.fileinterpreter.positionalprotocol.document.PositionalDocumentMisconfiguredSample;
-import org.fileinterpreter.positionalprotocol.document.PositionalMisconfiguredLineSample;
 import org.junit.Test;
 
-public class MisconfiguredDocumentTest {
+public class MisconfiguredPositionalDocumentTest {
 	@Test(expected = MisconfiguredDocumentException.class)
 	public void whenGettingContentFromAMisconfiguredLineShouldThrowAnException() throws MisconfiguredDocumentException {
 		PositionalMisconfiguredLineSample sample = new PositionalMisconfiguredLineSample();
@@ -41,5 +42,25 @@ public class MisconfiguredDocumentTest {
 		PositionalDocumentMisconfiguredSample document = new PositionalDocumentMisconfiguredSample();
 		DocumentParser<PositionalDocumentMisconfiguredSample> parser = new DocumentParser<>(document);
 		parser.parse("1-00                JOHN DOE                      ~2-00                JOE BLACK                     ");
+	}
+	
+	@Document
+	private class PositionalDocumentMisconfiguredSample {
+	    @PositionalLine
+	    public PositionalLineSample line1;
+	    
+	    public PositionalLineSample line2;
+	    
+	    public PositionalDocumentMisconfiguredSample() {
+	        line1 = new PositionalLineSample();
+	        line2 = new PositionalLineSample();
+	    }
+	}
+	
+	private class PositionalMisconfiguredLineSample {
+	    @PositionalField(name = "User ID", startIndex = 1, size = 20)
+	    public String userID;
+
+	    public String name;
 	}
 }

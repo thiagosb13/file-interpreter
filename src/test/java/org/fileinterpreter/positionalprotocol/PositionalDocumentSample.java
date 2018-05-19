@@ -1,4 +1,4 @@
-package org.fileinterpreter.positionalprotocol.document;
+package org.fileinterpreter.positionalprotocol;
 
 import org.fileinterpreter.annotation.Document;
 import org.fileinterpreter.annotation.PositionalLine;

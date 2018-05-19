@@ -5,14 +5,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.text.IsEmptyString.isEmptyString;
 import static org.junit.Assert.assertThat;
 
+import org.fileinterpreter.annotation.Document;
+import org.fileinterpreter.annotation.PositionalLine;
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.parser.DocumentParser;
-import org.fileinterpreter.positionalprotocol.document.PositionalDocumentOrderedSample;
-import org.fileinterpreter.positionalprotocol.document.PositionalDocumentWithLineDelimiterSample;
 import org.junit.Test;
 
-public class ReadingFromPositionalDocumentTest {
-
+public class PositionalDocumentWithLineDelimiterTest {
     @Test
     public void shouldFillAllOfPropertiesOfTheObject() throws MisconfiguredDocumentException {
         PositionalDocumentWithLineDelimiterSample document = new PositionalDocumentWithLineDelimiterSample();
@@ -39,14 +38,17 @@ public class ReadingFromPositionalDocumentTest {
         assertThat(document.line2.name, is(equalTo("NC")));
     }
     
-    @Test
-    public void fieldsShouldBeProcessedInOrderOfDeclaration() throws MisconfiguredDocumentException {
-        PositionalDocumentOrderedSample document = new PositionalDocumentOrderedSample();
-        DocumentParser<PositionalDocumentOrderedSample> parser = new DocumentParser<>(document);
-        parser.parse("1-00                JOHN DOE                      ~2-00                JOE BLACK                     ~3-00                BILL WARD                     ");
-        
-        assertThat(document.line3.userID.trim(), is("1-00"));
-        assertThat(document.line2.userID.trim(), is("2-00"));
-        assertThat(document.line1.userID.trim(), is("3-00"));
-    }
+	@Document(lineDelimiter = "~")
+	public class PositionalDocumentWithLineDelimiterSample {
+	    @PositionalLine
+	    public PositionalLineSample line1;
+	    
+	    @PositionalLine
+	    public PositionalLineSample line2;
+
+	    public PositionalDocumentWithLineDelimiterSample() {
+	        line1 = new PositionalLineSample();
+	        line2 = new PositionalLineSample();
+	    }
+	}
 }

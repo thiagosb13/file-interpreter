@@ -5,7 +5,6 @@ import static org.junit.Assert.assertThat;
 
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.parser.DocumentParser;
-import org.fileinterpreter.positionalprotocol.document.PositionalDocumentSample;
 import org.junit.Test;
 
 public class WritingToPositionalDocumentTest {
