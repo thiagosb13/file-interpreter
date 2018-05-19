@@ -57,7 +57,7 @@ public class MisconfiguredPositionalDocumentTest {
 	    }
 	}
 	
-	private class PositionalMisconfiguredLineSample {
+	public class PositionalMisconfiguredLineSample {
 	    @PositionalField(name = "User ID", startIndex = 1, size = 20)
 	    public String userID;
 
