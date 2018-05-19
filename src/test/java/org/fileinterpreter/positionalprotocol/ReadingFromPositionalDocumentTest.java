@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import org.fileinterpreter.parser.DocumentParser;
+import org.fileinterpreter.positionalprotocol.document.PositionalDocumentWithLineDelimiterSample;
 import org.junit.Test;
 
 public class ReadingFromPositionalDocumentTest {

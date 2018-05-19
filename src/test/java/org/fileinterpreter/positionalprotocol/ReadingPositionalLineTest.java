@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.fileinterpreter.annotation.PositionalLine;
+import org.fileinterpreter.positionalprotocol.document.PositionalLineSample;
 import org.junit.Test;
 
 public class ReadingPositionalLineTest {
