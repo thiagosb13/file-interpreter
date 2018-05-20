@@ -1,14 +1,20 @@
 package org.fileinterpreter.parser;
 
+import com.google.common.base.Supplier;
+import org.fileinterpreter.annotation.Document;
+import org.fileinterpreter.annotation.PositionalLine;
+import org.fileinterpreter.exception.MisconfiguredDocumentException;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.fileinterpreter.annotation.Document;
-import org.fileinterpreter.annotation.PositionalLine;
-import org.fileinterpreter.exception.MisconfiguredDocumentException;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class DocumentParser<T> {
     private T templateClass;
@@ -29,6 +35,9 @@ public class DocumentParser<T> {
                 Object line = field.get(templateClass);
 
                 String value = positionalLine.parser().newInstance().toContent(line);
+                if (isNullOrEmpty(value.trim())){
+                    continue;
+                }
 
                 lines.add(value);
             } catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
@@ -44,15 +53,14 @@ public class DocumentParser<T> {
     public void parse(String content) throws MisconfiguredDocumentException {
         Objects.requireNonNull(content);
 
-        String[] linesText = content.split(getLineDelimiter());
-        int linesContentSize = linesText.length;
+        Supplier<Stream<String>> linesText = () -> Pattern.compile(getLineDelimiter()).splitAsStream(content);
 
         Field[] fields = templateClass.getClass().getFields();
         
         for (int i = 0; i < fields.length; i++) {
-            String contentLine = i < linesContentSize ? linesText[i] : null;
-            
             PositionalLine positionalLine = getPositionalLineFrom(fields[i]);
+
+            String contentLine = getContentLine(linesText.get(), i, positionalLine.pattern());
 
             try {
                 Object line = fields[i].get(templateClass);
@@ -63,7 +71,20 @@ public class DocumentParser<T> {
             }
         }        
     }
-    
+
+    private String getContentLine(Stream<String> linesText, int i, String pattern) {
+        if (!isNullOrEmpty(pattern)){
+            Optional<String> lineContent = linesText.filter(l -> Pattern.matches(pattern, l))
+                                                    .findAny();
+
+            return lineContent.orElse(null);
+        }
+
+        return linesText.skip(i)
+                        .findFirst()
+                        .orElse(null);
+    }
+
     private PositionalLine getPositionalLineFrom(Field field) throws MisconfiguredDocumentException {
     	PositionalLine positionalLine = field.getDeclaredAnnotation(PositionalLine.class);
     	

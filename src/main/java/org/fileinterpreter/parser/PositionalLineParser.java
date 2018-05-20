@@ -9,7 +9,7 @@ import org.pmw.tinylog.Logger;
 import com.google.common.base.Ascii;
 import com.google.common.base.Strings;
 
-public class PositionalLineParser extends LineParser {
+public class PositionalLineParser implements LineParser {
 
     @Override
     public void parse(String content, Object object) throws MisconfiguredDocumentException {

@@ -17,7 +17,7 @@ public class OptionalLinesInDocumentTest {
 	public void whenALineIsOptionalAndItsNotInTheContentShouldNotFillTheObject() throws MisconfiguredDocumentException {
 		DocumentWithOptionalLinesTest document = new DocumentWithOptionalLinesTest();
         DocumentParser<DocumentWithOptionalLinesTest> parser = new DocumentParser<>(document);
-        parser.parse("AA1-00                JOHN DOE                      \r\nCC3-00                BILL WARD                     ");
+        parser.parse("AA1-00              JOHN DOE                      \r\nCC3-00              BILL WARD                     ");
         
         assertThat(document.line1.userID.trim(), is("AA1-00"));
         assertThat(document.line2.userID.trim(), isEmptyString());
@@ -28,7 +28,7 @@ public class OptionalLinesInDocumentTest {
 	public void whenALineIsNotOptionalAndItsNotInTheContentShouldThrowAnException() throws MisconfiguredDocumentException {
 		DocumentWithOptionalLinesTest document = new DocumentWithOptionalLinesTest();
         DocumentParser<DocumentWithOptionalLinesTest> parser = new DocumentParser<>(document);
-        parser.parse("BB2-00                JOHN DOE                      \r\nCC3-00                BILL WARD                     ");
+        parser.parse("BB2-00              JOHN DOE                      \r\nCC3-00              BILL WARD                     ");
 	}
 	
 	@Test
@@ -42,7 +42,7 @@ public class OptionalLinesInDocumentTest {
 
         DocumentParser<DocumentWithOptionalLinesTest> parser = new DocumentParser<>(document);
         
-        assertThat(parser.toContent(), is("AA1-00                JOHN DOE                      \r\nCC3-00                BILL WARD                     "));
+        assertThat(parser.toContent(), is("AA1-00              JOHN DOE                      \r\nCC3-00              BILL WARD                     "));
     }
 
 	@Test(expected = MisfilledDocumentException.class)
@@ -61,13 +61,13 @@ public class OptionalLinesInDocumentTest {
 	
 	@Document
 	public class DocumentWithOptionalLinesTest {
-		@PositionalLine
+		@PositionalLine(pattern = "AA.*")
         public PositionalLineSimpleSample line1;
         
-        @PositionalLine(optional = true)
+        @PositionalLine(pattern = "BB.*", optional = true)
         public PositionalLineSimpleSample line2;
         
-        @PositionalLine
+        @PositionalLine(pattern = "CC.*")
         public PositionalLineSimpleSample line3;
         
         public DocumentWithOptionalLinesTest() {

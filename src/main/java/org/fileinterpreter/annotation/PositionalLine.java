@@ -12,4 +12,6 @@ import org.fileinterpreter.parser.PositionalLineParser;
 public @interface PositionalLine {
 	boolean optional() default false;
     Class<PositionalLineParser> parser() default PositionalLineParser.class;
+
+    String pattern() default "";
 }

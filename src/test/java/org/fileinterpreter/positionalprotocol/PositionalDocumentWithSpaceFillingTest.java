@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class PositionalDocumentWithSpaceFillingTest {
 	@Test
-	public void shouldCompleteFieldValueWithDefinedSpaceFilling() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
+	public void shouldCompleteFieldValueWithDefinedSpaceFilling() throws MisconfiguredDocumentException {
 		PositionalLineWithDefaultFillingSample sample = new PositionalLineWithDefaultFillingSample();
 		sample.name = "JOHN DOE";
 		sample.userID = "1-00";
