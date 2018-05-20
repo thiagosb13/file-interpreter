@@ -3,8 +3,6 @@ package org.fileinterpreter.positionalprotocol;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.fileinterpreter.annotation.Document;
-import org.fileinterpreter.annotation.PositionalLine;
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.parser.DocumentParser;
 import org.junit.Test;
