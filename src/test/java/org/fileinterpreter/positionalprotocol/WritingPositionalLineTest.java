@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class WritingPositionalLineTest {
 	@Test
-	public void shouldBuildTheObjectBasedOnFieldsDefinition() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
+	public void shouldBuildTheObjectBasedOnFieldsDefinition() throws MisconfiguredDocumentException {
 		PositionalLineSample sample = new PositionalLineSample();
 		sample.name = "JOHN DOE";
 		sample.userID = "1-00";
@@ -19,7 +19,7 @@ public class WritingPositionalLineTest {
 	}
 
     @Test
-    public void shouldTruncFieldsToSizeDefinition() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
+    public void shouldTruncFieldsToSizeDefinition() throws MisconfiguredDocumentException {
         PositionalLineSample sample = new PositionalLineSample();
         sample.name = "JOHN DOE 999999999999999999999999999999";
         sample.userID = "1-00 99999999999999999999999999999999";

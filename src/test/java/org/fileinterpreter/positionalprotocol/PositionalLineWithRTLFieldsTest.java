@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class PositionalLineWithRTLFieldsTest {
     @Test
-    public void ifAFieldIsConfiguredToRTLShouldWriteItRightAligned() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
+    public void ifAFieldIsConfiguredToRTLShouldWriteItRightAligned() throws MisconfiguredDocumentException {
         PositionalLineRTLSample sample = new PositionalLineRTLSample();
         sample.name = "JOHN DOE";
         sample.userID = "1-00";

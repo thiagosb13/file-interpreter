@@ -17,22 +17,22 @@ import java.util.stream.Stream;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class DocumentParser<T> {
-    private T templateClass;
+    private Class<T> templateClass;
 
-    public DocumentParser(T templateClass) {
+    public DocumentParser(Class<T> templateClass) {
         this.templateClass = Objects.requireNonNull(templateClass);
     }
 
-    public String toContent() throws MisconfiguredDocumentException {
+    public static String toContent(Object document) throws MisconfiguredDocumentException {
         List<String> lines = new ArrayList<>();
 
-        Field[] fields = templateClass.getClass().getFields();
+        Field[] fields = document.getClass().getFields();
 
         for (Field field : fields) {
             try {
                 PositionalLine positionalLine = getPositionalLineFrom(field);
 
-                Object line = field.get(templateClass);
+                Object line = field.get(document);
 
                 String value = positionalLine.parser().newInstance().toContent(line);
                 if (isNullOrEmpty(value.trim())){
@@ -47,15 +47,25 @@ public class DocumentParser<T> {
         }
 
         return lines.stream()
-                    .collect(Collectors.joining(getLineDelimiter()));
+                    .collect(Collectors.joining(getLineDelimiter(document)));
     }
 
-    public void parse(String content) throws MisconfiguredDocumentException {
+    public T parse(String content) throws MisconfiguredDocumentException {
         Objects.requireNonNull(content);
 
-        Supplier<Stream<String>> linesText = () -> Pattern.compile(getLineDelimiter()).splitAsStream(content);
+        T parsedObject = null;
 
-        Field[] fields = templateClass.getClass().getFields();
+        try {
+            parsedObject = templateClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            // FIXME: Empty catch
+            e.printStackTrace();
+        }
+
+        String delimiter = getLineDelimiter(parsedObject);
+        Supplier<Stream<String>> linesText = () -> Pattern.compile(delimiter).splitAsStream(content);
+
+        Field[] fields = parsedObject.getClass().getFields();
         
         for (int i = 0; i < fields.length; i++) {
             PositionalLine positionalLine = getPositionalLineFrom(fields[i]);
@@ -63,13 +73,15 @@ public class DocumentParser<T> {
             String contentLine = getContentLine(linesText.get(), i, positionalLine.pattern());
 
             try {
-                Object line = fields[i].get(templateClass);
+                Object line = fields[i].get(parsedObject);
                 positionalLine.parser().newInstance().parse(contentLine, line);
             } catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
                 // FIXME: Empty catch
                 e.printStackTrace();
             }
-        }        
+        }
+
+        return parsedObject;
     }
 
     private String getContentLine(Stream<String> linesText, int i, String pattern) {
@@ -85,7 +97,7 @@ public class DocumentParser<T> {
                         .orElse(null);
     }
 
-    private PositionalLine getPositionalLineFrom(Field field) throws MisconfiguredDocumentException {
+    private static PositionalLine getPositionalLineFrom(Field field) throws MisconfiguredDocumentException {
     	PositionalLine positionalLine = field.getDeclaredAnnotation(PositionalLine.class);
     	
     	if (positionalLine == null)
@@ -94,11 +106,11 @@ public class DocumentParser<T> {
     	return positionalLine;
     }
     
-    private String getLineDelimiter() {
+    private static String getLineDelimiter(Object documentTemplate) {
         String lineDelimiter = "";
         
         try {
-            Document document = templateClass.getClass().getDeclaredAnnotation(Document.class);
+            Document document = documentTemplate.getClass().getDeclaredAnnotation(Document.class);
             
             lineDelimiter = document.lineDelimiter();
         } catch (IllegalArgumentException e) {

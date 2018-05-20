@@ -1,23 +1,19 @@
 package org.fileinterpreter.positionalprotocol;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.text.IsEmptyString.isEmptyString;
-import static org.junit.Assert.assertThat;
-
-import org.fileinterpreter.annotation.Document;
-import org.fileinterpreter.annotation.PositionalField;
-import org.fileinterpreter.annotation.PositionalLine;
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.exception.MisfilledDocumentException;
 import org.fileinterpreter.parser.DocumentParser;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.text.IsEmptyString.isEmptyString;
+import static org.junit.Assert.assertThat;
+
 public class OptionalLinesInDocumentTest {
 	@Test
 	public void whenALineIsOptionalAndItsNotInTheContentShouldNotFillTheObject() throws MisconfiguredDocumentException {
-		DocumentWithOptionalLinesTest document = new DocumentWithOptionalLinesTest();
-        DocumentParser<DocumentWithOptionalLinesTest> parser = new DocumentParser<>(document);
-        parser.parse("AA1-00              JOHN DOE                      \r\nCC3-00              BILL WARD                     ");
+        DocumentParser<DocumentWithOptionalLinesTest> parser = new DocumentParser<>(DocumentWithOptionalLinesTest.class);
+        DocumentWithOptionalLinesTest document = parser.parse("AA1-00              JOHN DOE                      \r\nCC3-00              BILL WARD                     ");
         
         assertThat(document.line1.userID.trim(), is("AA1-00"));
         assertThat(document.line2.userID.trim(), isEmptyString());
@@ -26,8 +22,7 @@ public class OptionalLinesInDocumentTest {
 
 	@Test(expected = MisfilledDocumentException.class)
 	public void whenALineIsNotOptionalAndItsNotInTheContentShouldThrowAnException() throws MisconfiguredDocumentException {
-		DocumentWithOptionalLinesTest document = new DocumentWithOptionalLinesTest();
-        DocumentParser<DocumentWithOptionalLinesTest> parser = new DocumentParser<>(document);
+        DocumentParser<DocumentWithOptionalLinesTest> parser = new DocumentParser<>(DocumentWithOptionalLinesTest.class);
         parser.parse("BB2-00              JOHN DOE                      \r\nCC3-00              BILL WARD                     ");
 	}
 	
@@ -39,10 +34,8 @@ public class OptionalLinesInDocumentTest {
         
         document.line3.userID = "CC3-00";
         document.line3.name = "BILL WARD";
-
-        DocumentParser<DocumentWithOptionalLinesTest> parser = new DocumentParser<>(document);
         
-        assertThat(parser.toContent(), is("AA1-00              JOHN DOE                      \r\nCC3-00              BILL WARD                     "));
+        assertThat(DocumentParser.toContent(document), is("AA1-00              JOHN DOE                      \r\nCC3-00              BILL WARD                     "));
     }
 
 	@Test(expected = MisfilledDocumentException.class)
@@ -54,33 +47,6 @@ public class OptionalLinesInDocumentTest {
         document.line3.userID = "CC3-00";
         document.line3.name = "BILL WARD";
 
-        DocumentParser<DocumentWithOptionalLinesTest> parser = new DocumentParser<>(document);
-        
-        parser.toContent();
-	}
-	
-	@Document
-	public class DocumentWithOptionalLinesTest {
-		@PositionalLine(pattern = "AA.*")
-        public PositionalLineSimpleSample line1;
-        
-        @PositionalLine(pattern = "BB.*", optional = true)
-        public PositionalLineSimpleSample line2;
-        
-        @PositionalLine(pattern = "CC.*")
-        public PositionalLineSimpleSample line3;
-        
-        public DocumentWithOptionalLinesTest() {
-            line1 = new PositionalLineSimpleSample();
-            line2 = new PositionalLineSimpleSample();
-            line3 = new PositionalLineSimpleSample();
-        }
-	}
-	
-	public class PositionalLineSimpleSample {
-		@PositionalField(name = "User ID", startIndex = 1, size = 20)
-		public String userID;
-		@PositionalField(name = "User Name", startIndex = 21, size = 30)
-		public String name;
+        DocumentParser.toContent(document);
 	}
 }

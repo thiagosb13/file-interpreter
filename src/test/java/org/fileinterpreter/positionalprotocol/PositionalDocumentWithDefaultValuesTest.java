@@ -10,7 +10,7 @@ import org.junit.Test;
 public class PositionalDocumentWithDefaultValuesTest {
 
 	@Test
-	public void whenValueIsNotFilledShouldUseDefaultValue() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
+	public void whenValueIsNotFilledShouldUseDefaultValue() throws MisconfiguredDocumentException {
 		PositionalLineSample sample = new PositionalLineSample();
 		sample.userID = "1-00";
 

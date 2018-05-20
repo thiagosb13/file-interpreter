@@ -10,7 +10,7 @@ import org.junit.Test;
 public class ReadingPositionalLineTest {
     
     @Test
-    public void shouldSplitFieldsFillInValuesBasedOnConfiguration() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
+    public void shouldSplitFieldsFillInValuesBasedOnConfiguration() throws MisconfiguredDocumentException {
         PositionalLineSample sample = new PositionalLineSample();
         PositionalLineParser parser = new PositionalLineParser();
         parser.parse("1-00                JOHN DOE                      ", sample);
@@ -20,7 +20,7 @@ public class ReadingPositionalLineTest {
     }
 
     @Test
-    public void whenTextLineSizeIsLessThanPositionalLineSizeObjectShouldFillInFieldsWithEmptyValue() throws InstantiationException, IllegalAccessException, MisconfiguredDocumentException {
+    public void whenTextLineSizeIsLessThanPositionalLineSizeObjectShouldFillInFieldsWithEmptyValue() throws MisconfiguredDocumentException {
         PositionalLineSample sample = new PositionalLineSample();
         PositionalLineParser parser = new PositionalLineParser();
         parser.parse("1-00                JOHN DOE      ", sample);
