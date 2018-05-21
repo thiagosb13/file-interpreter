@@ -1,6 +1,7 @@
 package org.fileinterpreter.positionalprotocol;
 
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
+import org.fileinterpreter.exception.MisfilledDocumentException;
 import org.fileinterpreter.parser.DocumentParser;
 import org.junit.Test;
 
@@ -11,7 +12,7 @@ import static org.junit.Assert.assertThat;
 
 public class PositionalDocumentWithLineDelimiterTest {
     @Test
-    public void shouldFillAllOfPropertiesOfTheObject() throws MisconfiguredDocumentException {
+    public void shouldFillAllOfPropertiesOfTheObject() throws MisconfiguredDocumentException, MisfilledDocumentException {
         DocumentParser<PositionalDocumentWithLineDelimiterSample> parser = new DocumentParser<>(PositionalDocumentWithLineDelimiterSample.class);
         PositionalDocumentWithLineDelimiterSample document = parser.parse("1-00                JOHN DOE                      ~2-00                JOE BLACK                     ");
         
@@ -23,7 +24,7 @@ public class PositionalDocumentWithLineDelimiterTest {
     }
 
     @Test
-    public void shouldFillOnlyTheFirstLineWithTheText() throws MisconfiguredDocumentException {
+    public void shouldFillOnlyTheFirstLineWithTheText() throws MisconfiguredDocumentException, MisfilledDocumentException {
         DocumentParser<PositionalDocumentWithLineDelimiterSample> parser = new DocumentParser<>(PositionalDocumentWithLineDelimiterSample.class);
         PositionalDocumentWithLineDelimiterSample document = parser.parse("1-00                JOHN DOE                      ");
         

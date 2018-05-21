@@ -11,7 +11,7 @@ import static org.junit.Assert.assertThat;
 
 public class OptionalLinesInDocumentTest {
 	@Test
-	public void whenALineIsOptionalAndItsNotInTheContentShouldNotFillTheObject() throws MisconfiguredDocumentException {
+	public void whenALineIsOptionalAndItsNotInTheContentShouldNotFillTheObject() throws MisconfiguredDocumentException, MisfilledDocumentException {
         DocumentParser<DocumentWithOptionalLinesTest> parser = new DocumentParser<>(DocumentWithOptionalLinesTest.class);
         DocumentWithOptionalLinesTest document = parser.parse("AA1-00              JOHN DOE                      \r\nCC3-00              BILL WARD                     ");
         
@@ -21,13 +21,13 @@ public class OptionalLinesInDocumentTest {
 	}
 
 	@Test(expected = MisfilledDocumentException.class)
-	public void whenALineIsNotOptionalAndItsNotInTheContentShouldThrowAnException() throws MisconfiguredDocumentException {
+	public void whenALineIsNotOptionalAndItsNotInTheContentShouldThrowAnException() throws MisconfiguredDocumentException, MisfilledDocumentException {
         DocumentParser<DocumentWithOptionalLinesTest> parser = new DocumentParser<>(DocumentWithOptionalLinesTest.class);
         parser.parse("BB2-00              JOHN DOE                      \r\nCC3-00              BILL WARD                     ");
 	}
 	
 	@Test
-	public void whenALineIsOptionalAndTheObjectIsNotFilledShouldNotFillInContent() throws MisconfiguredDocumentException {
+	public void whenALineIsOptionalAndTheObjectIsNotFilledShouldNotFillInContent() throws MisconfiguredDocumentException, MisfilledDocumentException {
 		DocumentWithOptionalLinesTest document = new DocumentWithOptionalLinesTest();
         document.line1.userID = "AA1-00";
         document.line1.name = "JOHN DOE";
@@ -39,7 +39,7 @@ public class OptionalLinesInDocumentTest {
     }
 
 	@Test(expected = MisfilledDocumentException.class)
-	public void whenALineIsNotOptionalAndTheObjectIsNotFilledShouldNotThrowAnException() throws MisconfiguredDocumentException {
+	public void whenALineIsNotOptionalAndTheObjectIsNotFilledShouldNotThrowAnException() throws MisconfiguredDocumentException, MisfilledDocumentException {
 		DocumentWithOptionalLinesTest document = new DocumentWithOptionalLinesTest();
         document.line2.userID = "BB1-00";
         document.line2.name = "JOE BLACK";

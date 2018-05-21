@@ -4,13 +4,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
+import org.fileinterpreter.exception.MisfilledDocumentException;
 import org.fileinterpreter.parser.DocumentParser;
 import org.junit.Test;
 
 public class WritingToPositionalDocumentTest {
 
     @Test
-    public void shouldTransfomLineIntoPlainText() throws MisconfiguredDocumentException {
+    public void shouldTransfomLineIntoPlainText() throws MisconfiguredDocumentException, MisfilledDocumentException {
         PositionalDocumentSample document = new PositionalDocumentSample();
         document.line1.userID = "1-00";
         document.line1.name = "JOHN DOE";

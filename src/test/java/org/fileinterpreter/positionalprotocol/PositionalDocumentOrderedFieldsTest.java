@@ -4,13 +4,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
+import org.fileinterpreter.exception.MisfilledDocumentException;
 import org.fileinterpreter.parser.DocumentParser;
 import org.junit.Test;
 
 public class PositionalDocumentOrderedFieldsTest {
     
     @Test
-    public void fieldsShouldBeProcessedInOrderOfDeclaration() throws MisconfiguredDocumentException {
+    public void fieldsShouldBeProcessedInOrderOfDeclaration() throws MisconfiguredDocumentException, MisfilledDocumentException {
         DocumentParser<PositionalDocumentOrderedSample> parser = new DocumentParser<>(PositionalDocumentOrderedSample.class);
         PositionalDocumentOrderedSample document = parser.parse("1-00                JOHN DOE                      \r\n2-00                JOE BLACK                     \r\n3-00                BILL WARD                     ");
         

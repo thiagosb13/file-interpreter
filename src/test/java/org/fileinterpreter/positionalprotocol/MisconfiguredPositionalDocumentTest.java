@@ -1,6 +1,7 @@
 package org.fileinterpreter.positionalprotocol;
 
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
+import org.fileinterpreter.exception.MisfilledDocumentException;
 import org.fileinterpreter.parser.DocumentParser;
 import org.fileinterpreter.parser.PositionalLineParser;
 import org.junit.Test;
@@ -23,7 +24,7 @@ public class MisconfiguredPositionalDocumentTest {
 	}
 	
 	@Test(expected = MisconfiguredDocumentException.class)
-	public void whenGettingContentFromADocumentWithMisconfiguredLineShouldThrowAnException() throws MisconfiguredDocumentException {
+	public void whenGettingContentFromADocumentWithMisconfiguredLineShouldThrowAnException() throws MisconfiguredDocumentException, MisfilledDocumentException {
 		PositionalDocumentMisconfiguredSample document = new PositionalDocumentMisconfiguredSample();
         document.line1.userID = "1-00";
         document.line1.name = "JOHN DOE";
@@ -35,7 +36,7 @@ public class MisconfiguredPositionalDocumentTest {
 	}
 	
 	@Test(expected = MisconfiguredDocumentException.class)
-	public void whenParsingADocumentWithMisconfiguredLineShouldThrowAnException() throws MisconfiguredDocumentException {
+	public void whenParsingADocumentWithMisconfiguredLineShouldThrowAnException() throws MisconfiguredDocumentException, MisfilledDocumentException {
 		DocumentParser<PositionalDocumentMisconfiguredSample> parser = new DocumentParser<>(PositionalDocumentMisconfiguredSample.class);
 		parser.parse("1-00                JOHN DOE                      ~2-00                JOE BLACK                     ");
 	}

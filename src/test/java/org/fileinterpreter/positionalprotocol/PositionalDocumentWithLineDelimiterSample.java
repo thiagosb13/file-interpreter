@@ -9,7 +9,7 @@ public class PositionalDocumentWithLineDelimiterSample {
     @PositionalLine
     public PositionalLineSample line1;
 
-    @PositionalLine
+    @PositionalLine(optional = true)
     public PositionalLineSample line2;
 
     public PositionalDocumentWithLineDelimiterSample() {
