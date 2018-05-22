@@ -1,10 +1,11 @@
-package org.fileinterpreter.positionalprotocol;
+package org.fileinterpreter.positionalprotocol.positionaldocument;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.parser.PositionalLineParser;
+import org.fileinterpreter.positionalprotocol.positionaldocument.PositionalLineSample;
 import org.junit.Test;
 
 public class ReadingPositionalLineTest {

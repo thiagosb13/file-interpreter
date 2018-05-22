@@ -1,9 +1,8 @@
-package org.fileinterpreter.positionalprotocol;
+package org.fileinterpreter.positionalprotocol.positionaldocumentwithspacefilling;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.fileinterpreter.annotation.PositionalField;
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.parser.PositionalLineParser;
 import org.junit.Test;
@@ -18,11 +17,5 @@ public class PositionalDocumentWithSpaceFillingTest {
 		PositionalLineParser parser = new PositionalLineParser();
 		assertThat(parser.toContent(sample), is("1-00################JOHN DOE**********************"));
 	}
-	
-	public class PositionalLineWithDefaultFillingSample {
-	    @PositionalField(name = "User ID", startIndex = 1, size = 20, spaceFilling = '#')
-	    public String userID;
-	    @PositionalField(name = "User Name", startIndex = 21, size = 30, defaultValue = "NC", spaceFilling = '*')
-	    public String name;
-	}
+
 }

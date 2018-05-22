@@ -1,4 +1,4 @@
-package org.fileinterpreter.positionalprotocol;
+package org.fileinterpreter.positionalprotocol.positionaldocument;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

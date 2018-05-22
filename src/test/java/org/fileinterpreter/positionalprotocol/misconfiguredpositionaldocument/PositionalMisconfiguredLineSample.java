@@ -1,4 +1,4 @@
-package org.fileinterpreter.positionalprotocol;
+package org.fileinterpreter.positionalprotocol.misconfiguredpositionaldocument;
 
 import org.fileinterpreter.annotation.PositionalField;
 

@@ -1,12 +1,12 @@
-package org.fileinterpreter.positionalprotocol;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+package org.fileinterpreter.positionalprotocol.positionaldocumentordered;
 
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.exception.MisfilledDocumentException;
 import org.fileinterpreter.parser.DocumentParser;
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class PositionalDocumentOrderedFieldsTest {
     

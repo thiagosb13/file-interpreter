@@ -1,7 +1,8 @@
-package org.fileinterpreter.positionalprotocol;
+package org.fileinterpreter.positionalprotocol.positionaldocumentordered;
 
 import org.fileinterpreter.annotation.Document;
 import org.fileinterpreter.annotation.PositionalLine;
+import org.fileinterpreter.positionalprotocol.positionaldocument.PositionalLineSample;
 
 @Document
 public class PositionalDocumentOrderedSample {
