@@ -14,10 +14,4 @@ public class PositionalDocumentOrderedSample {
 
     @PositionalLine
     public PositionalLineSample line1;
-
-    public PositionalDocumentOrderedSample() {
-        line1 = new PositionalLineSample();
-        line2 = new PositionalLineSample();
-        line3 = new PositionalLineSample();
-    }
 }

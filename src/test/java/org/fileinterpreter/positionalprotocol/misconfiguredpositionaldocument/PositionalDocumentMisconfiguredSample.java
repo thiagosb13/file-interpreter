@@ -10,9 +10,4 @@ public class PositionalDocumentMisconfiguredSample {
     public PositionalLineSample line1;
 
     public PositionalLineSample line2;
-
-    public PositionalDocumentMisconfiguredSample() {
-        line1 = new PositionalLineSample();
-        line2 = new PositionalLineSample();
-    }
 }

@@ -44,6 +44,8 @@ public class PositionalLineParser implements LineParser {
 
     @Override
     public String toContent(Object line) throws MisconfiguredDocumentException {
+        if (line == null) return "";
+        
         StringBuilder builder = new StringBuilder();
         Field[] fields = line.getClass().getFields();
 

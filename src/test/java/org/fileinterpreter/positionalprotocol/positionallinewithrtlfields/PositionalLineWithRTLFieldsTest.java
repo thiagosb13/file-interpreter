@@ -17,5 +17,4 @@ public class PositionalLineWithRTLFieldsTest {
         PositionalLineParser parser = new PositionalLineParser();
         assertThat(parser.toContent(sample), is("1-00                                      JOHN DOE"));
     }
-
 }

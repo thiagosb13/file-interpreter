@@ -11,9 +11,4 @@ public class PositionalDocumentWithLineDelimiterSample {
 
     @PositionalLine(optional = true)
     public PositionalLineSample line2;
-
-    public PositionalDocumentWithLineDelimiterSample() {
-        line1 = new PositionalLineSample();
-        line2 = new PositionalLineSample();
-    }
 }

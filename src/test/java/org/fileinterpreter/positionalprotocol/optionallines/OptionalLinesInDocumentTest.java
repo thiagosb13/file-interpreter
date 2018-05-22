@@ -12,8 +12,8 @@ import static org.junit.Assert.assertThat;
 public class OptionalLinesInDocumentTest {
 	@Test
 	public void whenALineIsOptionalAndItsNotInTheContentShouldNotFillTheObject() throws MisconfiguredDocumentException, MisfilledDocumentException {
-        DocumentParser<DocumentWithOptionalLinesTest> parser = new DocumentParser<>(DocumentWithOptionalLinesTest.class);
-        DocumentWithOptionalLinesTest document = parser.parse("AA1-00              JOHN DOE                      \r\nCC3-00              BILL WARD                     ");
+        DocumentParser<DocumentWithOptionalLines> parser = new DocumentParser<>(DocumentWithOptionalLines.class);
+        DocumentWithOptionalLines document = parser.parse("AA1-00              JOHN DOE                      \r\nCC3-00              BILL WARD                     ");
         
         assertThat(document.line1.userID.trim(), is("AA1-00"));
         assertThat(document.line2.userID.trim(), isEmptyString());
@@ -22,16 +22,18 @@ public class OptionalLinesInDocumentTest {
 
 	@Test(expected = MisfilledDocumentException.class)
 	public void whenALineIsNotOptionalAndItsNotInTheContentShouldThrowAnException() throws MisconfiguredDocumentException, MisfilledDocumentException {
-        DocumentParser<DocumentWithOptionalLinesTest> parser = new DocumentParser<>(DocumentWithOptionalLinesTest.class);
+        DocumentParser<DocumentWithOptionalLines> parser = new DocumentParser<>(DocumentWithOptionalLines.class);
         parser.parse("BB2-00              JOHN DOE                      \r\nCC3-00              BILL WARD                     ");
 	}
 	
 	@Test
 	public void whenALineIsOptionalAndTheObjectIsNotFilledShouldNotFillInContent() throws MisconfiguredDocumentException, MisfilledDocumentException {
-		DocumentWithOptionalLinesTest document = new DocumentWithOptionalLinesTest();
-        document.line1.userID = "AA1-00";
+		DocumentWithOptionalLines document = new DocumentWithOptionalLines();
+		document.line1 = new PositionalLineSimpleSample();
+		document.line1.userID = "AA1-00";
         document.line1.name = "JOHN DOE";
         
+        document.line3 = new PositionalLineSimpleSample();
         document.line3.userID = "CC3-00";
         document.line3.name = "BILL WARD";
         
@@ -40,10 +42,12 @@ public class OptionalLinesInDocumentTest {
 
 	@Test(expected = MisfilledDocumentException.class)
 	public void whenALineIsNotOptionalAndTheObjectIsNotFilledShouldNotThrowAnException() throws MisconfiguredDocumentException, MisfilledDocumentException {
-		DocumentWithOptionalLinesTest document = new DocumentWithOptionalLinesTest();
+		DocumentWithOptionalLines document = new DocumentWithOptionalLines();
+		document.line2 = new PositionalLineSimpleSample();
         document.line2.userID = "BB1-00";
         document.line2.name = "JOE BLACK";
         
+        document.line3 = new PositionalLineSimpleSample();
         document.line3.userID = "CC3-00";
         document.line3.name = "BILL WARD";
 

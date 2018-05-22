@@ -4,6 +4,7 @@ import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.exception.MisfilledDocumentException;
 import org.fileinterpreter.parser.DocumentParser;
 import org.fileinterpreter.parser.PositionalLineParser;
+import org.fileinterpreter.positionalprotocol.positionaldocument.PositionalLineSample;
 import org.junit.Test;
 
 public class MisconfiguredPositionalDocumentTest {
@@ -26,9 +27,11 @@ public class MisconfiguredPositionalDocumentTest {
 	@Test(expected = MisconfiguredDocumentException.class)
 	public void whenGettingContentFromADocumentWithMisconfiguredLineShouldThrowAnException() throws MisconfiguredDocumentException, MisfilledDocumentException {
 		PositionalDocumentMisconfiguredSample document = new PositionalDocumentMisconfiguredSample();
-        document.line1.userID = "1-00";
+		document.line1 = new PositionalLineSample();
+		document.line1.userID = "1-00";
         document.line1.name = "JOHN DOE";
         
+        document.line2 = new PositionalLineSample();
         document.line2.userID = "2-00";
         document.line2.name = "JOE BLACK";
 

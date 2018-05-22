@@ -4,7 +4,7 @@ import org.fileinterpreter.annotation.Document;
 import org.fileinterpreter.annotation.PositionalLine;
 
 @Document
-public class DocumentWithOptionalLinesTest {
+public class DocumentWithOptionalLines {
     @PositionalLine(pattern = "AA.*")
     public PositionalLineSimpleSample line1;
 
@@ -13,10 +13,4 @@ public class DocumentWithOptionalLinesTest {
 
     @PositionalLine(pattern = "CC.*")
     public PositionalLineSimpleSample line3;
-
-    public DocumentWithOptionalLinesTest() {
-        line1 = new PositionalLineSimpleSample();
-        line2 = new PositionalLineSimpleSample();
-        line3 = new PositionalLineSimpleSample();
-    }
 }
