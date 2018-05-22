@@ -13,9 +13,11 @@ public class WritingToPositionalDocumentTest {
     @Test
     public void shouldTransfomLineIntoPlainText() throws MisconfiguredDocumentException, MisfilledDocumentException {
         PositionalDocumentSample document = new PositionalDocumentSample();
+        document.line1 = new PositionalLineSample();
         document.line1.userID = "1-00";
         document.line1.name = "JOHN DOE";
-        
+
+        document.line2 = new PositionalLineSample();
         document.line2.userID = "2-00";
         document.line2.name = "JOE BLACK";
         

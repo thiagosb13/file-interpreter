@@ -81,6 +81,11 @@ public class DocumentParser<T> {
 
             try {
                 Object line = fields[i].get(parsedObject);
+                if (line == null) {
+                    line = fields[i].getType().newInstance();
+                    fields[i].set(parsedObject, line);
+                }
+
                 positionalLine.parser().newInstance().parse(contentLine, line);
             } catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
                 // FIXME: Empty catch

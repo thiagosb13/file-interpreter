@@ -1,4 +1,4 @@
-package org.fileinterpreter.positionalprotocol.positionaldocumentwithLinedelimiter;
+package org.fileinterpreter.positionalprotocol.positionaldocumentwithlinedelimiter;
 
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.exception.MisfilledDocumentException;
