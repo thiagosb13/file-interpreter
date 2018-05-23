@@ -3,6 +3,7 @@ package org.fileinterpreter.parser;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -94,7 +95,18 @@ public class DocumentParser<T> {
             	}
 
             	if (line instanceof Collection) {
-            		
+                    ParameterizedType lineType = (ParameterizedType) fields[i].getGenericType();
+                    Class<?> lineClass = (Class<?>) lineType.getActualTypeArguments()[0];
+                    Object lineItem = lineClass.newInstance();
+                    
+	            	String contentLine = getContentLine(linesText.get(), i, positionalLine.pattern());
+	            	
+	            	if (isNullOrEmpty(contentLine) && !positionalLine.optional())
+	            		throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but its content is not filled out.", fields[i].getName()));
+	            	
+	            	positionalLine.parser().newInstance().parse(contentLine, lineItem);
+
+	            	((Collection) line).add(lineItem);
             	} else {
 	            	String contentLine = getContentLine(linesText.get(), i, positionalLine.pattern());
 	            	
