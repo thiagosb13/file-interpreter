@@ -10,5 +10,4 @@ public class PositionalDocumentSample {
     
     @PositionalLine
     public PositionalLineSample line2;
-
 }

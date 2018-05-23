@@ -1,13 +1,10 @@
 package org.fileinterpreter.parser;
 
-import com.google.common.base.Supplier;
-import org.fileinterpreter.annotation.Document;
-import org.fileinterpreter.annotation.PositionalLine;
-import org.fileinterpreter.exception.MisconfiguredDocumentException;
-import org.fileinterpreter.exception.MisfilledDocumentException;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,7 +12,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import org.fileinterpreter.annotation.Document;
+import org.fileinterpreter.annotation.PositionalLine;
+import org.fileinterpreter.exception.MisconfiguredDocumentException;
+import org.fileinterpreter.exception.MisfilledDocumentException;
+
+import com.google.common.base.Supplier;
 
 public class DocumentParser<T> {
     private Class<T> templateClass;
@@ -31,20 +33,22 @@ public class DocumentParser<T> {
 
         for (Field field : fields) {
             try {
-                PositionalLine positionalLine = getPositionalLineFrom(field);
+            	Object line = field.get(document);
 
-                Object line = field.get(document);
+            	if (line instanceof Collection) {
+            		for (Object lineItem : (Collection<?>)line) {
+            			String value = getValueFrom(field, lineItem);
 
-                String value = positionalLine.parser().newInstance().toContent(line);
-				if (isNullOrEmpty(value.trim())) {
-					if (!positionalLine.optional())
-						throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but has no value.", field.getName()));
-					
-					continue;
-				}
-
-                lines.add(value);
-            } catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
+                        if (!isNullOrEmpty(value))
+                        	lines.add(value);
+            		}
+            	} else {
+	                String value = getValueFrom(field, line);
+	
+	                if (!isNullOrEmpty(value))
+	                	lines.add(value);
+            	}
+            } catch (IllegalArgumentException | IllegalAccessException e) {
                 // FIXME: Empty catch
                 e.printStackTrace();
             }
@@ -73,20 +77,32 @@ public class DocumentParser<T> {
         
         for (int i = 0; i < fields.length; i++) {
             PositionalLine positionalLine = getPositionalLineFrom(fields[i]);
-
-            String contentLine = getContentLine(linesText.get(), i, positionalLine.pattern());
             
-            if (isNullOrEmpty(contentLine) && !positionalLine.optional())
-            	throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but its content is not filled out.", fields[i].getName()));
-
             try {
-                Object line = fields[i].get(parsedObject);
-                if (line == null) {
-                    line = fields[i].getType().newInstance();
-                    fields[i].set(parsedObject, line);
-                }
+            	Object line = fields[i].get(parsedObject);
+            	
+            	if (line == null) {
+            		Class<?> fieldType = fields[i].getType();
+            		
+            		if (fieldType == Collection.class) {
+            			line = new ArrayList<>();
+            		} else {
+            			line = fieldType.newInstance();
+            		}
+            		
+            		fields[i].set(parsedObject, line);
+            	}
 
-                positionalLine.parser().newInstance().parse(contentLine, line);
+            	if (line instanceof Collection) {
+            		
+            	} else {
+	            	String contentLine = getContentLine(linesText.get(), i, positionalLine.pattern());
+	            	
+	            	if (isNullOrEmpty(contentLine) && !positionalLine.optional())
+	            		throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but its content is not filled out.", fields[i].getName()));
+	            	
+	            	positionalLine.parser().newInstance().parse(contentLine, line);
+            	}
             } catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
                 // FIXME: Empty catch
                 e.printStackTrace();
@@ -95,6 +111,26 @@ public class DocumentParser<T> {
 
         return parsedObject;
     }
+    
+	public static String getValueFrom(Field field, Object line) throws MisconfiguredDocumentException, IllegalAccessException, MisfilledDocumentException {
+		PositionalLine positionalLine = getPositionalLineFrom(field);
+
+		String value = "";
+
+		try {
+			value = positionalLine.parser().newInstance().toContent(line);
+		
+			if (isNullOrEmpty(value.trim())) {
+				if (!positionalLine.optional())
+					throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but has no value.", field.getName()));
+			}
+		} catch (InstantiationException e) {
+			// FIXME Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return value;
+	}    
 
     private String getContentLine(Stream<String> linesText, int index, String pattern) {
         if (!isNullOrEmpty(pattern)){
