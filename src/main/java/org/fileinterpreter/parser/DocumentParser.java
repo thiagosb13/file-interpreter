@@ -99,11 +99,11 @@ public class DocumentParser<T> {
                     ParameterizedType lineType = (ParameterizedType) field.getGenericType();
                     Class<?> lineClass = (Class<?>) lineType.getActualTypeArguments()[0];
                     
+                    if (!linesText.get().skip(i).findFirst().get().matches(positionalLine.pattern()) && !positionalLine.optional())
+                        throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but its content is not filled out.", field.getName()));
+                    
                     while (linesText.get().skip(i).findFirst().get().matches(positionalLine.pattern())) {
                         String contentLine = linesText.get().skip(i).findFirst().get();
-                        
-                        if (isNullOrEmpty(contentLine) && !positionalLine.optional())
-                            throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but its content is not filled out.", field.getName()));
                         
                         Object lineItem = lineClass.newInstance();
                         positionalLine.parser().newInstance().parse(contentLine, lineItem);

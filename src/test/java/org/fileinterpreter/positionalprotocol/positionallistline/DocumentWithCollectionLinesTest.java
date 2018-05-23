@@ -2,7 +2,6 @@ package org.fileinterpreter.positionalprotocol.positionallistline;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -53,12 +52,46 @@ public class DocumentWithCollectionLinesTest {
 	}
 	
 	@Test
-	public void whenALineIsACollectionAndOptionalAndIsNotFilledShouldNotFillInTheContent() {
-		fail();
+	public void whenALineIsACollectionAndOptionalAndIsNotFilledShouldNotFillInTheContent() throws MisconfiguredDocumentException, MisfilledDocumentException {
+        DocumentWithCollectionLinesSample document = new DocumentWithCollectionLinesSample();
+        document.line1 = new PositionalLineSimpleSample();
+        document.line1.userID = "AA1-00";
+        document.line1.name = "JOHN DOE";
+        
+        document.line3 = new PositionalLineSimpleSample();
+        document.line3.userID = "CC4-00";
+        document.line3.name = "BILL WARD";
+        
+        assertThat(DocumentParser.toContent(document), is("AA1-00              JOHN DOE                      \r\nCC4-00              BILL WARD                     "));
 	}
 	
 	@Test
-	public void whenALineIsACollectionAndOptionalAndIsNotFilledInTheContentShouldNotFillInTheObject() {
-		fail();
+	public void whenALineIsACollectionAndOptionalAndIsNotFilledInTheContentShouldNotFillInTheObject() throws MisconfiguredDocumentException, MisfilledDocumentException {
+        DocumentParser<DocumentWithCollectionLinesSample> parser = new DocumentParser<>(DocumentWithCollectionLinesSample.class);
+        DocumentWithCollectionLinesSample document = parser.parse("AA1-00              JOHN DOE                      \r\nCC5-00              BILL WARD                     ");
+        
+        assertThat(document.line1.userID.trim(), is("AA1-00"));
+        assertThat(document.line2.size(), is(0));
+        assertThat(document.line3.userID.trim(), is("CC5-00"));
+	}
+	
+	@Test(expected = MisfilledDocumentException.class)
+	public void whenALineIsACollectionNotOptionalAndIsNotFilledInTheContentShouldThrowException() throws MisconfiguredDocumentException, MisfilledDocumentException {
+        DocumentParser<DocumentWithMandatoryCollectionLinesSample> parser = new DocumentParser<>(DocumentWithMandatoryCollectionLinesSample.class);
+        parser.parse("AA1-00              JOHN DOE                      \r\nCC5-00              BILL WARD                     ");
+	}
+	
+	@Test(expected = MisfilledDocumentException.class)
+	public void whenALineIsACollectionNotOptionalAndIsNotFilledInTheObjectShouldThrowException() throws MisconfiguredDocumentException, MisfilledDocumentException {
+	    DocumentWithMandatoryCollectionLinesSample document = new DocumentWithMandatoryCollectionLinesSample();
+        document.line1 = new PositionalLineSimpleSample();
+        document.line1.userID = "AA1-00";
+        document.line1.name = "JOHN DOE";
+        
+        document.line3 = new PositionalLineSimpleSample();
+        document.line3.userID = "CC4-00";
+        document.line3.name = "BILL WARD";
+        
+        DocumentParser.toContent(document);
 	}
 }
