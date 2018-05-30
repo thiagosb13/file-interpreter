@@ -19,6 +19,7 @@ import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.exception.MisfilledDocumentException;
 
 import com.google.common.base.Supplier;
+import org.pmw.tinylog.Logger;
 
 public class DocumentParser<T> {
     private Class<T> templateClass;
@@ -50,8 +51,7 @@ public class DocumentParser<T> {
 	                	lines.add(value);
             	}
             } catch (IllegalArgumentException | IllegalAccessException e) {
-                // FIXME: Empty catch
-                e.printStackTrace();
+                Logger.error(e);
             }
         }
 
@@ -67,8 +67,7 @@ public class DocumentParser<T> {
         try {
             parsedObject = templateClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            // FIXME: Empty catch
-            e.printStackTrace();
+            Logger.error(e);
         }
 
         String delimiter = getLineDelimiter(parsedObject);
@@ -121,8 +120,7 @@ public class DocumentParser<T> {
 	            	positionalLine.parser().newInstance().parse(contentLine, line);
             	}
             } catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
-                // FIXME: Empty catch
-                e.printStackTrace();
+                Logger.error(e);
             }
             
             i++;
@@ -144,8 +142,7 @@ public class DocumentParser<T> {
 					throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but has no value.", field.getName()));
 			}
 		} catch (InstantiationException e) {
-			// FIXME Auto-generated catch block
-			e.printStackTrace();
+            Logger.error(e);
 		}
 		
 		return value;
@@ -181,8 +178,7 @@ public class DocumentParser<T> {
             
             lineDelimiter = document.lineDelimiter();
         } catch (IllegalArgumentException e) {
-            // FIXME: Empty catch
-            e.printStackTrace();
+            Logger.error(e);
         }
         
         return lineDelimiter;
