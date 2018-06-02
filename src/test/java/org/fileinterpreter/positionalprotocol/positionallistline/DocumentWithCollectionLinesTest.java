@@ -5,9 +5,9 @@ import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 
+import org.fileinterpreter.DocumentParser;
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.exception.MisfilledDocumentException;
-import org.fileinterpreter.parser.DocumentParser;
 import org.fileinterpreter.positionalprotocol.optionallines.PositionalLineSimpleSample;
 import org.junit.Test;
 

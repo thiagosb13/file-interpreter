@@ -1,8 +1,8 @@
 package org.fileinterpreter.positionalprotocol.positionaldocumentordered;
 
+import org.fileinterpreter.DocumentParser;
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.exception.MisfilledDocumentException;
-import org.fileinterpreter.parser.DocumentParser;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

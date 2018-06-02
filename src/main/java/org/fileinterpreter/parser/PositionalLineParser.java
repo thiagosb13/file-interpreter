@@ -3,6 +3,7 @@ package org.fileinterpreter.parser;
 import java.lang.reflect.Field;
 
 import org.fileinterpreter.annotation.PositionalField;
+import org.fileinterpreter.annotation.PositionalLine;
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.pmw.tinylog.Logger;
 
@@ -81,5 +82,14 @@ public class PositionalLineParser implements LineParser {
     
     private String trunc(String value, int size) {
         return Ascii.truncate(value, Math.min(value.length(), size), "");
+    }
+
+    public static PositionalLine getConfigFrom(Field field) throws MisconfiguredDocumentException {
+    	PositionalLine positionalLine = field.getDeclaredAnnotation(PositionalLine.class);
+    	
+    	if (positionalLine == null)
+    		throw new MisconfiguredDocumentException(String.format("Line '%s' is not annotated correctly.", field.getName()));
+    	
+    	return positionalLine;
     }
 }

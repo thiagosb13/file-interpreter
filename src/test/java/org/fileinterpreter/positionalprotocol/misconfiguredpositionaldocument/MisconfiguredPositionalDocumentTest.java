@@ -1,8 +1,8 @@
 package org.fileinterpreter.positionalprotocol.misconfiguredpositionaldocument;
 
+import org.fileinterpreter.DocumentParser;
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.exception.MisfilledDocumentException;
-import org.fileinterpreter.parser.DocumentParser;
 import org.fileinterpreter.parser.PositionalLineParser;
 import org.fileinterpreter.positionalprotocol.positionaldocument.PositionalLineSample;
 import org.junit.Test;
