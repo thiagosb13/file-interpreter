@@ -1,10 +1,10 @@
-package org.fileinterpreter.parser;
+package org.fileinterpreter.commons;
 
 import java.util.logging.Logger;
 
 import org.fileinterpreter.annotation.Document;
 
-public class DocumentCommons {
+public class Documents {
     public static String getLineDelimiter(Object documentTemplate) {
         String lineDelimiter = "";
         
@@ -13,8 +13,8 @@ public class DocumentCommons {
             
             lineDelimiter = document.lineDelimiter();
         } catch (IllegalArgumentException e) {
-            Logger.getLogger(DocumentCommons.class.getCanonicalName())
-            	  .severe(e.getStackTrace().toString());
+            Logger.getLogger(Documents.class.getCanonicalName())
+            	  .severe(e.getMessage());
         }
         
         return lineDelimiter;

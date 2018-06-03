@@ -11,7 +11,7 @@ import org.fileinterpreter.exception.MisconfiguredDocumentException;
 public class PositionalLineParser implements LineParser {
 
     @Override
-    public void parse(String content, Object object) throws MisconfiguredDocumentException {
+    public void parse(String content, Object object) {
         Field[] fields = object.getClass().getFields();
 
         for (Field field : fields) {
@@ -46,7 +46,7 @@ public class PositionalLineParser implements LineParser {
     }
 
     @Override
-    public String toContent(Object line) throws MisconfiguredDocumentException {
+    public String toContent(Object line) {
         if (line == null) return "";
         
         StringBuilder builder = new StringBuilder();
@@ -70,7 +70,7 @@ public class PositionalLineParser implements LineParser {
         return builder.toString();
     }
     
-    private PositionalField getPositionalFieldFrom(Field field) throws MisconfiguredDocumentException {
+    private PositionalField getPositionalFieldFrom(Field field) {
     	PositionalField positionalField = field.getDeclaredAnnotation(PositionalField.class);
     	
     	if (positionalField == null)
@@ -88,7 +88,7 @@ public class PositionalLineParser implements LineParser {
         return Strings.truncate(value, Math.min(value.length(), size), "");
     }
 
-    public static PositionalLine getConfigFrom(Field field) throws MisconfiguredDocumentException {
+    public static PositionalLine getConfigFrom(Field field) {
     	PositionalLine positionalLine = field.getDeclaredAnnotation(PositionalLine.class);
     	
     	if (positionalLine == null)

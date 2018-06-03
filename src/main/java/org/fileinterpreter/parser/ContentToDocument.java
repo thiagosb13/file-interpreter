@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.fileinterpreter.annotation.PositionalLine;
+import org.fileinterpreter.commons.Documents;
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.exception.MisfilledDocumentException;
 
@@ -27,7 +28,7 @@ public class ContentToDocument<T> {
 		this.templateClass = Objects.requireNonNull(templateClass);
 	}
 	
-	public T parse(String content) throws MisconfiguredDocumentException, MisfilledDocumentException {
+	public T parse(String content) {
 		Objects.requireNonNull(content);
 
 		createANewParsedObject();
@@ -39,7 +40,7 @@ public class ContentToDocument<T> {
 		return parsedObject;
 	}
 
-	private void parseContentToFields() throws MisconfiguredDocumentException, MisfilledDocumentException {
+	private void parseContentToFields() {
 		Field[] fields = parsedObject.getClass().getFields();
 
 		for (Field field : fields) {
@@ -47,7 +48,7 @@ public class ContentToDocument<T> {
 		}
 	}
 
-	private void parseContentTo(Field field) throws MisconfiguredDocumentException, MisfilledDocumentException {
+	private void parseContentTo(Field field) {
 		PositionalLine positionalLine = PositionalLineParser.getConfigFrom(field);
 
 		Object line = getLineFrom(field);
@@ -61,7 +62,7 @@ public class ContentToDocument<T> {
 		currentLineIndex++;
 	}
 
-	private void parseSingleField(Field field, Object line, PositionalLine positionalLine) throws MisfilledDocumentException, MisconfiguredDocumentException {
+	private void parseSingleField(Field field, Object line, PositionalLine positionalLine) {
 		String contentLine = getContentLine(contentLines.get(), currentLineIndex, positionalLine.pattern());
 
 		if (isNullOrEmpty(contentLine) && !positionalLine.optional())
@@ -75,7 +76,7 @@ public class ContentToDocument<T> {
 		}
 	}
 
-	private void parseCollectionField(Field field, Object line, PositionalLine positionalLine) throws MisfilledDocumentException, MisconfiguredDocumentException {
+	private void parseCollectionField(Field field, Object line, PositionalLine positionalLine) {
 		ParameterizedType lineType = (ParameterizedType) field.getGenericType();
 		Class<?> lineClass = (Class<?>) lineType.getActualTypeArguments()[0];
 
@@ -134,7 +135,7 @@ public class ContentToDocument<T> {
 	}
 	
 	private void splitContentInLines(String content) {
-		String delimiter = DocumentCommons.getLineDelimiter(parsedObject);
+		String delimiter = Documents.getLineDelimiter(parsedObject);
 		contentLines = () -> Pattern.compile(delimiter).splitAsStream(content);
 	}
 

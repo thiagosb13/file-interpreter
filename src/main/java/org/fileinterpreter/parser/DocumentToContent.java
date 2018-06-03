@@ -10,12 +10,12 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.fileinterpreter.annotation.PositionalLine;
+import org.fileinterpreter.commons.Documents;
 import org.fileinterpreter.commons.Strings;
-import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.exception.MisfilledDocumentException;
 
 public class DocumentToContent {
-	public static String parse(Object document) throws MisconfiguredDocumentException, MisfilledDocumentException {
+	public static String parse(Object document) {
     	List<String> lines = new ArrayList<>();
 
         Field[] fields = document.getClass().getFields();
@@ -44,11 +44,11 @@ public class DocumentToContent {
         }
 
         return lines.stream()
-                    .collect(Collectors.joining(DocumentCommons.getLineDelimiter(document)));
+                    .collect(Collectors.joining(Documents.getLineDelimiter(document)));
 		
 	}
     
-	public static String getValueFrom(Field field, Object line) throws MisconfiguredDocumentException, IllegalAccessException, MisfilledDocumentException {
+	public static String getValueFrom(Field field, Object line) {
 		PositionalLine positionalLine = PositionalLineParser.getConfigFrom(field);
 
 		String value = Strings.EMPTY;
@@ -60,7 +60,7 @@ public class DocumentToContent {
 				if (!positionalLine.optional())
 					throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but has no value.", field.getName()));
 			}
-		} catch (InstantiationException e) {
+		} catch (InstantiationException | IllegalAccessException e) {
             Logger.getLogger("org.fileinterpreter.parser.DocumentToContent")
             	  .severe(e.getMessage());
 		}
