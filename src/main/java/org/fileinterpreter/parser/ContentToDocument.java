@@ -1,6 +1,6 @@
 package org.fileinterpreter.parser;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import static org.fileinterpreter.commons.Strings.isNullOrEmpty;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -8,15 +8,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.fileinterpreter.annotation.PositionalLine;
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.exception.MisfilledDocumentException;
-import org.pmw.tinylog.Logger;
-
-import com.google.common.base.Supplier;
 
 public class ContentToDocument<T> {
 	private Class<T> templateClass;
@@ -33,7 +32,8 @@ public class ContentToDocument<T> {
 		try {
 			parsedObject = templateClass.newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
-			Logger.error(e);
+			Logger.getLogger("org.fileinterpreter.parser.ContentToDocument")
+				  .severe(e.getStackTrace().toString());
 		}
 
 		String delimiter = DocumentCommons.getLineDelimiter(parsedObject);
@@ -64,8 +64,7 @@ public class ContentToDocument<T> {
 					ParameterizedType lineType = (ParameterizedType) field.getGenericType();
 					Class<?> lineClass = (Class<?>) lineType.getActualTypeArguments()[0];
 
-					if (!linesText.get().skip(i).findFirst().get().matches(positionalLine.pattern())
-							&& !positionalLine.optional())
+					if (!linesText.get().skip(i).findFirst().get().matches(positionalLine.pattern()) && !positionalLine.optional())
 						throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but its content is not filled out.", field.getName()));
 
 					while (linesText.get().skip(i).findFirst().get().matches(positionalLine.pattern())) {
@@ -82,13 +81,13 @@ public class ContentToDocument<T> {
 					String contentLine = getContentLine(linesText.get(), i, positionalLine.pattern());
 
 					if (isNullOrEmpty(contentLine) && !positionalLine.optional())
-						throw new MisfilledDocumentException(String
-								.format("Line '%s' is mandatory but its content is not filled out.", field.getName()));
+						throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but its content is not filled out.", field.getName()));
 
 					positionalLine.parser().newInstance().parse(contentLine, line);
 				}
 			} catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
-				Logger.error(e);
+				Logger.getLogger("org.fileinterpreter.parser.ContentToDocument")
+					  .severe(e.getStackTrace().toString());
 			}
 
 			i++;

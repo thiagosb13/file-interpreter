@@ -1,17 +1,18 @@
 package org.fileinterpreter.parser;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import static org.fileinterpreter.commons.Strings.isNullOrEmpty;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.fileinterpreter.annotation.PositionalLine;
+import org.fileinterpreter.commons.Strings;
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.exception.MisfilledDocumentException;
-import org.pmw.tinylog.Logger;
 
 public class DocumentToContent {
 	public static String parse(Object document) throws MisconfiguredDocumentException, MisfilledDocumentException {
@@ -37,7 +38,8 @@ public class DocumentToContent {
 	                	lines.add(value);
             	}
             } catch (IllegalArgumentException | IllegalAccessException e) {
-                Logger.error(e);
+                Logger.getLogger("org.fileinterpreter.parser.DocumentToContent")
+                	  .severe(e.getStackTrace().toString());
             }
         }
 
@@ -49,7 +51,7 @@ public class DocumentToContent {
 	public static String getValueFrom(Field field, Object line) throws MisconfiguredDocumentException, IllegalAccessException, MisfilledDocumentException {
 		PositionalLine positionalLine = PositionalLineParser.getConfigFrom(field);
 
-		String value = "";
+		String value = Strings.EMPTY;
 
 		try {
 			value = positionalLine.parser().newInstance().toContent(line);
@@ -59,7 +61,8 @@ public class DocumentToContent {
 					throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but has no value.", field.getName()));
 			}
 		} catch (InstantiationException e) {
-            Logger.error(e);
+            Logger.getLogger("org.fileinterpreter.parser.DocumentToContent")
+            	  .severe(e.getStackTrace().toString());
 		}
 		
 		return value;

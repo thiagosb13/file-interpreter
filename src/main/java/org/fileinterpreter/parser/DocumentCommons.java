@@ -1,7 +1,8 @@
 package org.fileinterpreter.parser;
 
+import java.util.logging.Logger;
+
 import org.fileinterpreter.annotation.Document;
-import org.pmw.tinylog.Logger;
 
 public class DocumentCommons {
     public static String getLineDelimiter(Object documentTemplate) {
@@ -12,7 +13,8 @@ public class DocumentCommons {
             
             lineDelimiter = document.lineDelimiter();
         } catch (IllegalArgumentException e) {
-            Logger.error(e);
+            Logger.getLogger("org.fileinterpreter.parser.DocumentCommons")
+            	  .severe(e.getStackTrace().toString());
         }
         
         return lineDelimiter;

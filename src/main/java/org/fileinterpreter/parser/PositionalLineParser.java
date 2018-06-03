@@ -1,14 +1,12 @@
 package org.fileinterpreter.parser;
 
 import java.lang.reflect.Field;
+import java.util.logging.Logger;
 
 import org.fileinterpreter.annotation.PositionalField;
 import org.fileinterpreter.annotation.PositionalLine;
+import org.fileinterpreter.commons.Strings;
 import org.fileinterpreter.exception.MisconfiguredDocumentException;
-import org.pmw.tinylog.Logger;
-
-import com.google.common.base.Ascii;
-import com.google.common.base.Strings;
 
 public class PositionalLineParser implements LineParser {
 
@@ -28,8 +26,10 @@ public class PositionalLineParser implements LineParser {
                     try {
                         value = content.substring(beginIndex, beginIndex + positionalField.size());
                     } catch (Exception e) {
-                        Logger.error(String.format("Could not get the value of the '%s' field from '%s' line.", field.getName(), content));
-                        Logger.error(e);
+                    	Logger.getLogger("org.fileinterpreter.parser.DocumentToContent")
+                    		  .severe(String.format("Could not get the value of the '%s' field from '%s' line.", field.getName(), content));
+                        Logger.getLogger("org.fileinterpreter.parser.DocumentToContent")
+                        	  .severe(e.getStackTrace().toString());
                     }
                 } else {
                     value = positionalField.defaultValue();
@@ -37,8 +37,10 @@ public class PositionalLineParser implements LineParser {
 
                 field.set(object, value);
             } catch (IllegalArgumentException | IllegalAccessException e) {
-                Logger.error(String.format("Could not get the field from '%s' line.", field.getName(), content));
-                Logger.error(e);
+            	Logger.getLogger("org.fileinterpreter.parser.DocumentToContent")
+      		  		  .severe(String.format("Could not get the value of the '%s' field from '%s' line.", field.getName(), content));
+            	Logger.getLogger("org.fileinterpreter.parser.DocumentToContent")
+          	  	 	  .severe(e.getStackTrace().toString());
             }
         }
     }
@@ -58,8 +60,10 @@ public class PositionalLineParser implements LineParser {
                 String rawValue = value != null ? value.toString() : positionalField.defaultValue();
                 builder.append(trunc(pad(rawValue, positionalField.size(), positionalField.rtl(), positionalField.spaceFilling()), positionalField.size()));
             } catch (IllegalArgumentException | IllegalAccessException e) {
-                Logger.error(String.format("Could not get the field '%s'.", field.getName()));
-                Logger.error(e);
+            	Logger.getLogger("org.fileinterpreter.parser.DocumentToContent")
+            		  .severe(String.format("Could not get the field '%s'.", field.getName()));
+            	Logger.getLogger("org.fileinterpreter.parser.DocumentToContent")
+          	  		  .severe(e.getStackTrace().toString());
             }
         } 
         
@@ -76,12 +80,12 @@ public class PositionalLineParser implements LineParser {
     }
     
     private String pad(String value, int size, boolean rtl, char defaultFilling) {
-        return rtl ? Strings.padStart(value, size, defaultFilling) 
-                   : Strings.padEnd(value, size, defaultFilling);
+        return rtl ? Strings.padLeft(value, size, defaultFilling) 
+                   : Strings.padRight(value, size, defaultFilling);
     }
     
     private String trunc(String value, int size) {
-        return Ascii.truncate(value, Math.min(value.length(), size), "");
+        return Strings.truncate(value, Math.min(value.length(), size), "");
     }
 
     public static PositionalLine getConfigFrom(Field field) throws MisconfiguredDocumentException {
