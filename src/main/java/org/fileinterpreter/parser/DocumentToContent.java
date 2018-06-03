@@ -15,37 +15,47 @@ import org.fileinterpreter.commons.Strings;
 import org.fileinterpreter.exception.MisfilledDocumentException;
 
 public class DocumentToContent {
-	public static String parse(Object document) {
-    	List<String> lines = new ArrayList<>();
-
-        Field[] fields = document.getClass().getFields();
-
-        for (Field field : fields) {
-            try {
-            	Object line = field.get(document);
-
-            	if (line instanceof Collection) {
-            		for (Object lineItem : (Collection<?>)line) {
-            			String value = getValueFrom(field, lineItem);
-
-                        if (!isNullOrEmpty(value))
-                        	lines.add(value);
-            		}
-            	} else {
-	                String value = getValueFrom(field, line);
+	private static List<String> lines;
 	
-	                if (!isNullOrEmpty(value))
-	                	lines.add(value);
-            	}
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                Logger.getLogger("org.fileinterpreter.parser.DocumentToContent")
-                	  .severe(e.getMessage());
-            }
-        }
+	public static String parse(Object document) {
+    	lines = new ArrayList<>();
+
+        parseDocumentToContent(document);
 
         return lines.stream()
                     .collect(Collectors.joining(Documents.getLineDelimiter(document)));
-		
+	}
+
+	private static void parseDocumentToContent(Object document) {
+		Field[] fields = document.getClass().getFields();
+
+        for (Field field : fields) {
+            parseFieldToContent(field, document);
+        }
+	}
+
+	private static void parseFieldToContent(Field field, Object document) {
+		try {
+			Object line = field.get(document);
+
+			if (line instanceof Collection) {
+				for (Object lineItem : (Collection<?>)line) {
+					parseFieldToLineContent(field, lineItem);
+				}
+			} else {
+		        parseFieldToLineContent(field, line);
+			}
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+		    Logger.getLogger(DocumentToContent.class.getCanonicalName())
+		    	  .severe(e.getMessage());
+		}
+	}
+
+	private static void parseFieldToLineContent(Field field, Object line) {
+		String value = getValueFrom(field, line);
+
+		if (!isNullOrEmpty(value))
+			lines.add(value);
 	}
     
 	public static String getValueFrom(Field field, Object line) {
@@ -56,12 +66,10 @@ public class DocumentToContent {
 		try {
 			value = positionalLine.parser().newInstance().toContent(line);
 		
-			if (isNullOrEmpty(value.trim())) {
-				if (!positionalLine.optional())
-					throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but has no value.", field.getName()));
-			}
+			if (isNullOrEmpty(value.trim()) && !positionalLine.optional())
+				throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but has no value.", field.getName()));
 		} catch (InstantiationException | IllegalAccessException e) {
-            Logger.getLogger("org.fileinterpreter.parser.DocumentToContent")
+            Logger.getLogger(DocumentToContent.class.getCanonicalName())
             	  .severe(e.getMessage());
 		}
 		

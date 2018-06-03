@@ -15,7 +15,6 @@ import java.util.stream.Stream;
 
 import org.fileinterpreter.annotation.PositionalLine;
 import org.fileinterpreter.commons.Documents;
-import org.fileinterpreter.exception.MisconfiguredDocumentException;
 import org.fileinterpreter.exception.MisfilledDocumentException;
 
 public class ContentToDocument<T> {
@@ -80,12 +79,12 @@ public class ContentToDocument<T> {
 		ParameterizedType lineType = (ParameterizedType) field.getGenericType();
 		Class<?> lineClass = (Class<?>) lineType.getActualTypeArguments()[0];
 
-		if (!contentLines.get().skip(currentLineIndex).findFirst().get().matches(positionalLine.pattern()) && !positionalLine.optional())
+		String contentLine = contentLines.get().skip(currentLineIndex).findFirst().get();
+		
+		if (!contentLine.matches(positionalLine.pattern()) && !positionalLine.optional())
 			throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but its content is not filled out.", field.getName()));
 
-		while (contentLines.get().skip(currentLineIndex).findFirst().get().matches(positionalLine.pattern())) {
-			String contentLine = contentLines.get().skip(currentLineIndex).findFirst().get();
-
+		while (contentLine.matches(positionalLine.pattern())) {
 			try {
 				Object lineItem = lineClass.newInstance();
 				positionalLine.parser().newInstance().parse(contentLine, lineItem);
@@ -96,6 +95,8 @@ public class ContentToDocument<T> {
 			}
 
 			currentLineIndex++;
+			
+			contentLine = contentLines.get().skip(currentLineIndex).findFirst().get();
 		}
 	}
 
