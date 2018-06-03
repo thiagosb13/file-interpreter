@@ -39,7 +39,7 @@ public class DocumentToContent {
             	}
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 Logger.getLogger("org.fileinterpreter.parser.DocumentToContent")
-                	  .severe(e.getStackTrace().toString());
+                	  .severe(e.getMessage());
             }
         }
 
@@ -62,7 +62,7 @@ public class DocumentToContent {
 			}
 		} catch (InstantiationException e) {
             Logger.getLogger("org.fileinterpreter.parser.DocumentToContent")
-            	  .severe(e.getStackTrace().toString());
+            	  .severe(e.getMessage());
 		}
 		
 		return value;

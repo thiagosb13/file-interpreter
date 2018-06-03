@@ -19,6 +19,9 @@ import org.fileinterpreter.exception.MisfilledDocumentException;
 
 public class ContentToDocument<T> {
 	private Class<T> templateClass;
+	private T parsedObject;
+	private Supplier<Stream<String>> contentLines;
+	private int currentLineIndex;
 	
 	public ContentToDocument(Class<T> templateClass) {
 		this.templateClass = Objects.requireNonNull(templateClass);
@@ -27,7 +30,76 @@ public class ContentToDocument<T> {
 	public T parse(String content) throws MisconfiguredDocumentException, MisfilledDocumentException {
 		Objects.requireNonNull(content);
 
-		T parsedObject = null;
+		createANewParsedObject();
+
+		splitContentInLines(content);
+
+		parseContentToFields();
+
+		return parsedObject;
+	}
+
+	private void parseContentToFields() throws MisconfiguredDocumentException, MisfilledDocumentException {
+		Field[] fields = parsedObject.getClass().getFields();
+
+		for (Field field : fields) {
+			parseContentTo(field);
+		}
+	}
+
+	private void parseContentTo(Field field) throws MisconfiguredDocumentException, MisfilledDocumentException {
+		PositionalLine positionalLine = PositionalLineParser.getConfigFrom(field);
+
+		try {
+			Object line = field.get(parsedObject);
+
+			if (line == null) {
+				Class<?> fieldType = field.getType();
+
+				if (fieldType == Collection.class) {
+					line = new ArrayList<>();
+				} else {
+					line = fieldType.newInstance();
+				}
+
+				field.set(parsedObject, line);
+			}
+
+			if (line instanceof Collection) {
+				ParameterizedType lineType = (ParameterizedType) field.getGenericType();
+				Class<?> lineClass = (Class<?>) lineType.getActualTypeArguments()[0];
+
+				if (!contentLines.get().skip(currentLineIndex).findFirst().get().matches(positionalLine.pattern()) && !positionalLine.optional())
+					throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but its content is not filled out.", field.getName()));
+
+				while (contentLines.get().skip(currentLineIndex).findFirst().get().matches(positionalLine.pattern())) {
+					String contentLine = contentLines.get().skip(currentLineIndex).findFirst().get();
+
+					Object lineItem = lineClass.newInstance();
+					positionalLine.parser().newInstance().parse(contentLine, lineItem);
+
+					((Collection) line).add(lineItem);
+
+					currentLineIndex++;
+				}
+			} else {
+				String contentLine = getContentLine(contentLines.get(), currentLineIndex, positionalLine.pattern());
+
+				if (isNullOrEmpty(contentLine) && !positionalLine.optional())
+					throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but its content is not filled out.", field.getName()));
+
+				positionalLine.parser().newInstance().parse(contentLine, line);
+			}
+		} catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
+			Logger.getLogger("org.fileinterpreter.parser.ContentToDocument")
+				  .severe(e.getStackTrace().toString());
+		}
+		
+		currentLineIndex++;
+	}
+
+	private void createANewParsedObject() {
+		parsedObject = null;
 
 		try {
 			parsedObject = templateClass.newInstance();
@@ -35,65 +107,11 @@ public class ContentToDocument<T> {
 			Logger.getLogger("org.fileinterpreter.parser.ContentToDocument")
 				  .severe(e.getStackTrace().toString());
 		}
-
+	}
+	
+	private void splitContentInLines(String content) {
 		String delimiter = DocumentCommons.getLineDelimiter(parsedObject);
-		Supplier<Stream<String>> linesText = () -> Pattern.compile(delimiter).splitAsStream(content);
-
-		Field[] fields = parsedObject.getClass().getFields();
-
-		int i = 0;
-		for (Field field : fields) {
-			PositionalLine positionalLine = PositionalLineParser.getConfigFrom(field);
-
-			try {
-				Object line = field.get(parsedObject);
-
-				if (line == null) {
-					Class<?> fieldType = field.getType();
-
-					if (fieldType == Collection.class) {
-						line = new ArrayList<>();
-					} else {
-						line = fieldType.newInstance();
-					}
-
-					field.set(parsedObject, line);
-				}
-
-				if (line instanceof Collection) {
-					ParameterizedType lineType = (ParameterizedType) field.getGenericType();
-					Class<?> lineClass = (Class<?>) lineType.getActualTypeArguments()[0];
-
-					if (!linesText.get().skip(i).findFirst().get().matches(positionalLine.pattern()) && !positionalLine.optional())
-						throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but its content is not filled out.", field.getName()));
-
-					while (linesText.get().skip(i).findFirst().get().matches(positionalLine.pattern())) {
-						String contentLine = linesText.get().skip(i).findFirst().get();
-
-						Object lineItem = lineClass.newInstance();
-						positionalLine.parser().newInstance().parse(contentLine, lineItem);
-
-						((Collection) line).add(lineItem);
-
-						i++;
-					}
-				} else {
-					String contentLine = getContentLine(linesText.get(), i, positionalLine.pattern());
-
-					if (isNullOrEmpty(contentLine) && !positionalLine.optional())
-						throw new MisfilledDocumentException(String.format("Line '%s' is mandatory but its content is not filled out.", field.getName()));
-
-					positionalLine.parser().newInstance().parse(contentLine, line);
-				}
-			} catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
-				Logger.getLogger("org.fileinterpreter.parser.ContentToDocument")
-					  .severe(e.getStackTrace().toString());
-			}
-
-			i++;
-		}
-
-		return parsedObject;
+		contentLines = () -> Pattern.compile(delimiter).splitAsStream(content);
 	}
 
     private String getContentLine(Stream<String> linesText, int index, String pattern) {
