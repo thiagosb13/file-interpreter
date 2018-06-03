@@ -26,9 +26,9 @@ public class PositionalLineParser implements LineParser {
                     try {
                         value = content.substring(beginIndex, beginIndex + positionalField.size());
                     } catch (Exception e) {
-                    	Logger.getLogger("org.fileinterpreter.parser.PositionalLineParser")
+                    	Logger.getLogger(this.getClass().getCanonicalName())
                     		  .severe(String.format("Could not get the value of the '%s' field from '%s' line.", field.getName(), content));
-                        Logger.getLogger("org.fileinterpreter.parser.PositionalLineParser")
+                        Logger.getLogger(this.getClass().getCanonicalName())
                         	  .severe(e.getMessage());
                     }
                 } else {
@@ -37,9 +37,9 @@ public class PositionalLineParser implements LineParser {
 
                 field.set(object, value);
             } catch (IllegalArgumentException | IllegalAccessException e) {
-            	Logger.getLogger("org.fileinterpreter.parser.PositionalLineParser")
+            	Logger.getLogger(this.getClass().getCanonicalName())
       		  		  .severe(String.format("Could not get the value of the '%s' field from '%s' line.", field.getName(), content));
-            	Logger.getLogger("org.fileinterpreter.parser.PositionalLineParser")
+            	Logger.getLogger(this.getClass().getCanonicalName())
           	  	 	  .severe(e.getMessage());
             }
         }
@@ -60,9 +60,9 @@ public class PositionalLineParser implements LineParser {
                 String rawValue = value != null ? value.toString() : positionalField.defaultValue();
                 builder.append(trunc(pad(rawValue, positionalField.size(), positionalField.rtl(), positionalField.spaceFilling()), positionalField.size()));
             } catch (IllegalArgumentException | IllegalAccessException e) {
-            	Logger.getLogger("org.fileinterpreter.parser.PositionalLineParser")
+            	Logger.getLogger(this.getClass().getCanonicalName())
             		  .severe(String.format("Could not get the field '%s'.", field.getName()));
-            	Logger.getLogger("org.fileinterpreter.parser.PositionalLineParser")
+            	Logger.getLogger(this.getClass().getCanonicalName())
           	  		  .severe(e.getMessage());
             }
         } 

@@ -13,7 +13,7 @@ public class DocumentCommons {
             
             lineDelimiter = document.lineDelimiter();
         } catch (IllegalArgumentException e) {
-            Logger.getLogger("org.fileinterpreter.parser.DocumentCommons")
+            Logger.getLogger(DocumentCommons.class.getCanonicalName())
             	  .severe(e.getStackTrace().toString());
         }
         
